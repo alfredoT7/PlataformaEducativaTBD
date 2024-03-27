@@ -74,7 +74,13 @@ public class InicioDeSesionUI extends JFrame {
                     conn.insertarPIDEnSesion(aPID,id_usr);
                     JOptionPane.showMessageDialog(InicioDeSesionUI.this, "usuario encontrado");
                     //Alf ventanaUIS de credenciales
-                    VentanaCredenciales ventanaCredenciales= new VentanaCredenciales(conn,InicioDeSesionUI.this);
+                    //VentanaCredenciales ventanaCredenciales= new VentanaCredenciales(conn,InicioDeSesionUI.this);
+
+                    //dispose();
+                    //ventanaCredenciales.pack();
+                    //ventanaCredenciales.setLocationRelativeTo(null);
+                    //ventanaCredenciales.setVisible(true);
+                    setVisible(false);
                 }else{
                     JOptionPane.showMessageDialog(InicioDeSesionUI.this, "usuario NO encontrado, contraseña o nombre incorrectos");
                 }
