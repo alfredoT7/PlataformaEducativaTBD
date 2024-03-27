@@ -69,9 +69,9 @@ public class InicioDeSesionUI extends JFrame {
                 if(conn.verificarInicioSesion(usuarioField.getText(),contraseñaField.getText())>0){
                     int id_usr=conn.verificarInicioSesion(usuarioField.getText(),contraseñaField.getText());
                     //System.out.println(id_usr);
-                    int a=conn.getPID();
-                    System.out.println(a);
-                    conn.insertarPIDEnSesion(a,id_usr);
+                    int aPID=conn.getPID();
+                    System.out.println(aPID);
+                    conn.insertarPIDEnSesion(aPID,id_usr);
                     JOptionPane.showMessageDialog(InicioDeSesionUI.this, "usuario encontrado");
 
 

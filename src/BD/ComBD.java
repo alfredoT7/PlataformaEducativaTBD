@@ -4,7 +4,7 @@ import java.sql.*;
 import java.util.Random;
 
 public class ComBD {
-    private static final String url = "jdbc:postgresql://localhost:5432/Validacion";
+    private static final String url = "jdbc:postgresql://localhost:5432/Plataforma&Seg";
     private static final String user = "alfredo";
     private static final String contraseña = "notebok456";
     private Connection connection;
@@ -101,14 +101,17 @@ public class ComBD {
             Random rand = new Random();
             int id_sesion= rand.nextInt(10000)+1;
             try{
-                String consulta = "select insertar_sesion(?,?,?,?);";
+                String consulta = "select insertar_sesion(?,?,?,?,?);";
                 textoQuery=connection.prepareStatement(consulta);
                 textoQuery.setInt(1,id_user);
                 textoQuery.setInt(2,id_sesion);
                 textoQuery.setInt(3,PID);
                 //se puede cambiar
                 textoQuery.setTimestamp(4,new Timestamp(System.currentTimeMillis()));
+                textoQuery.setDate(5, new java.sql.Date(System.currentTimeMillis()));
                 textoQuery.execute();
+                System.out.println("SE LOGRO INSERTAR");
+                System.out.println(new java.sql.Date(System.currentTimeMillis()));
                 //resultSet.next();
             }catch (SQLException e){
                 e.printStackTrace();
