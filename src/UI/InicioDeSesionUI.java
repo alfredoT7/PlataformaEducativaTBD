@@ -22,7 +22,7 @@ public class InicioDeSesionUI extends JFrame {
         setLocationRelativeTo(null);
         setResizable(false);
 
-        ImageIcon backgroundImage = new ImageIcon("E:/1/a.jpg");
+        ImageIcon backgroundImage = new ImageIcon("recursos/fondo.jpg");
         JLabel backgroundLabel = new JLabel(backgroundImage);
         setContentPane(backgroundLabel);
         setLayout(new BorderLayout());
@@ -73,8 +73,8 @@ public class InicioDeSesionUI extends JFrame {
                     System.out.println(aPID);
                     conn.insertarPIDEnSesion(aPID,id_usr);
                     JOptionPane.showMessageDialog(InicioDeSesionUI.this, "usuario encontrado");
-
-
+                    //Alf ventanaUIS de credenciales
+                    VentanaCredenciales ventanaCredenciales= new VentanaCredenciales(conn,InicioDeSesionUI.this);
                 }else{
                     JOptionPane.showMessageDialog(InicioDeSesionUI.this, "usuario NO encontrado, contraseña o nombre incorrectos");
                 }
