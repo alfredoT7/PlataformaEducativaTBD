@@ -1,14 +1,14 @@
 package BD;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.Random;
 
 public class ComBD {
-    private static final String url = "jdbc:postgresql://localhost:5432/Plataforma&Seg";
-    private static final String user = "alfredo";
-    private static final String contraseña = "notebok456";
+    private static final String url="jdbc:postgresql://localhost:5432/Plataforma&Seg";
+    private static final String user="alfredo";
+    private static final String contraseña="notebok456";
     private Connection connection;
-
     public ComBD() {
         try {
             Class.forName("org.postgresql.Driver");
@@ -38,7 +38,6 @@ public class ComBD {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-
     }
         public int registrarUsuario(String nuevoUser, String contra ,String confirContra){
             PreparedStatement textoQuery = null;
@@ -117,4 +116,28 @@ public class ComBD {
                 e.printStackTrace();
             }
         }
+        public ArrayList<String> obtener_nombre_ui_por_usuario(int id_user){
+            ArrayList<String> listaFunciones = new ArrayList<>();
+            PreparedStatement textoQuery = null;
+            ResultSet resultSet = null;
+            try{
+                String consulta = "select obtener_nombre_ui_por_usuario(?);";
+                textoQuery=connection.prepareStatement(consulta);
+                textoQuery.setInt(1,id_user);
+                resultSet=textoQuery.executeQuery();
+                //int i=1;
+                while (resultSet.next()){
+
+                    String funcion = resultSet.getString("obtener_nombre_ui_por_usuario");
+                    //i++;
+                    listaFunciones.add(funcion);
+                }
+                //return listaFunciones;
+
+            }catch (SQLException e){
+                e.printStackTrace();
+            }
+            return listaFunciones;
+        }
+
 }

@@ -8,6 +8,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Random;
 import BD.ComBD;
 
@@ -74,12 +75,14 @@ public class InicioDeSesionUI extends JFrame {
                     conn.insertarPIDEnSesion(aPID,id_usr);
                     JOptionPane.showMessageDialog(InicioDeSesionUI.this, "usuario encontrado");
                     //Alf ventanaUIS de credenciales
-                    //VentanaCredenciales ventanaCredenciales= new VentanaCredenciales(conn,InicioDeSesionUI.this);
-
+                    ArrayList<String> listafunciones= conn.obtener_nombre_ui_por_usuario(id_usr);
+                    //mandar la ArrayList
+                    VentanaCredenciales ventanaCredenciales= new VentanaCredenciales(conn,InicioDeSesionUI.this);
                     //dispose();
-                    //ventanaCredenciales.pack();
-                    //ventanaCredenciales.setLocationRelativeTo(null);
-                    //ventanaCredenciales.setVisible(true);
+                    ventanaCredenciales.cargarFunciones(listafunciones);
+                    ventanaCredenciales.pack();
+                    ventanaCredenciales.setLocationRelativeTo(null);
+                    ventanaCredenciales.setVisible(true);
                     setVisible(false);
                 }else{
                     JOptionPane.showMessageDialog(InicioDeSesionUI.this, "usuario NO encontrado, contraseña o nombre incorrectos");

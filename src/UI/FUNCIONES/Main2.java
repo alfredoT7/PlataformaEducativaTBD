@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Main2 {
+    /*
     public static void main(String[] args) {
         List<String> funciones = Arrays.asList(
                 "Agregar Usuario",
@@ -28,4 +29,6 @@ public class Main2 {
             }
         });
     }
+
+     */
 }

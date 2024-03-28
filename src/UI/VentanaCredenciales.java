@@ -9,7 +9,7 @@ public class VentanaCredenciales extends JFrame {
 
     private JPanel panelFunciones;
 
-    public VentanaCredenciales(){//ComBD conn, InicioDeSesionUI inicioDeSesionUI) {
+    public VentanaCredenciales(ComBD conn, InicioDeSesionUI inicioDeSesionUI) {
         setTitle("Detalles del Rol de Usuario");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setPreferredSize(new Dimension(600, 400));
