@@ -3,6 +3,8 @@ import BD.ComBD;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 public class VentanaCredenciales extends JFrame {
@@ -14,18 +16,27 @@ public class VentanaCredenciales extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setPreferredSize(new Dimension(600, 400));
         setResizable(false);
+
         //panel principalk
-        JPanel mainPanel = new JPanel();
-        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
-        mainPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        JPanel panelPrincipal = new JPanel(){
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                // Ajusta la imagen de fondo al tamaño del panel
+                ImageIcon backgroundImage = new ImageIcon("recursos/fondo.jpg");
+                g.drawImage(backgroundImage.getImage(), 0, 0, this.getWidth(), this.getHeight(), null);
+            }
+        };
+        panelPrincipal.setLayout(new BoxLayout(panelPrincipal, BoxLayout.Y_AXIS));
+        panelPrincipal.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
         JPanel panelNombreRol = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
-        JLabel labelNombreRol = new JLabel("Nombre: Rol");
+        JLabel labelNombreRol = new JLabel("Nombre Completo");
         panelNombreRol.add(labelNombreRol);
-        mainPanel.add(panelNombreRol);
+        panelPrincipal.add(panelNombreRol);
 
-        mainPanel.add(Box.createVerticalStrut(5));
-        mainPanel.add(new JSeparator());
+        panelPrincipal.add(Box.createVerticalStrut(5));
+        panelPrincipal.add(new JSeparator());
         panelFunciones = new JPanel();
         panelFunciones.setLayout(new BoxLayout(panelFunciones, BoxLayout.Y_AXIS));
         JScrollPane scrollPane = new JScrollPane(panelFunciones,
@@ -34,16 +45,23 @@ public class VentanaCredenciales extends JFrame {
         scrollPane.setBorder(BorderFactory.createTitledBorder("Funciones Permitidas"));
         scrollPane.setPreferredSize(new Dimension(580, 200)); // Puedes ajustar esto según necesites
 
-        mainPanel.add(scrollPane);
-        mainPanel.add(Box.createVerticalStrut(5));
+        panelPrincipal.add(scrollPane);
+        panelPrincipal.add(Box.createVerticalStrut(5));
 
-        JButton irAtras = new JButton("Ir al HOME");
-        irAtras.setAlignmentX(Component.CENTER_ALIGNMENT);
-        mainPanel.add(irAtras);
-
-        getContentPane().add(mainPanel);
+        JButton irAtrasBoton = new JButton("Ir ATRAS");
+        irAtrasBoton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        panelPrincipal.add(irAtrasBoton);
+        getContentPane().add(panelPrincipal);
         pack();
         setLocationRelativeTo(null);
+
+        irAtrasBoton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                inicioDeSesionUI.setVisible(true);
+                setVisible(false);
+            }
+        });
     }
 
     public void aniadirFuncion(String nombreFuncion, String textoBoton) {
@@ -65,7 +83,7 @@ public class VentanaCredenciales extends JFrame {
     public void cargarFunciones(ArrayList<String> funciones) {
         panelFunciones.removeAll();
         for (String funcion : funciones) {
-            aniadirFuncion(funcion, "Ir");
+            aniadirFuncion(funcion, "Ir...");
         }
     }
 }
