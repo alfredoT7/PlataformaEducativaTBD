@@ -8,6 +8,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Random;
 import BD.ComBD;
 
@@ -22,7 +23,7 @@ public class InicioDeSesionUI extends JFrame {
         setLocationRelativeTo(null);
         setResizable(false);
 
-        ImageIcon backgroundImage = new ImageIcon("E:/1/a.jpg");
+        ImageIcon backgroundImage = new ImageIcon("recursos/fondo.jpg");
         JLabel backgroundLabel = new JLabel(backgroundImage);
         setContentPane(backgroundLabel);
         setLayout(new BorderLayout());
@@ -69,12 +70,20 @@ public class InicioDeSesionUI extends JFrame {
                 if(conn.verificarInicioSesion(usuarioField.getText(),contraseñaField.getText())>0){
                     int id_usr=conn.verificarInicioSesion(usuarioField.getText(),contraseñaField.getText());
                     //System.out.println(id_usr);
-                    int a=conn.getPID();
-                    System.out.println(a);
-                    conn.insertarPIDEnSesion(a,id_usr);
+                    int aPID=conn.getPID();
+                    System.out.println(aPID);
+                    conn.insertarPIDEnSesion(aPID,id_usr);
                     JOptionPane.showMessageDialog(InicioDeSesionUI.this, "usuario encontrado");
-
-
+                    //Alf ventanaUIS de credenciales
+                    ArrayList<String> listafunciones= conn.obtener_nombre_ui_por_usuario(id_usr);
+                    String rolesDelUsuarioSTR= conn.obtenerRolesUsuario(id_usr);
+                    VentanaCredenciales ventanaCredenciales= new VentanaCredenciales(conn,InicioDeSesionUI.this,usuarioField.getText(),rolesDelUsuarioSTR);
+                    System.out.println(rolesDelUsuarioSTR);
+                    ventanaCredenciales.cargarFunciones(listafunciones);
+                    ventanaCredenciales.pack();
+                    ventanaCredenciales.setLocationRelativeTo(null);
+                    ventanaCredenciales.setVisible(true);
+                    setVisible(false);
                 }else{
                     JOptionPane.showMessageDialog(InicioDeSesionUI.this, "usuario NO encontrado, contraseña o nombre incorrectos");
                 }
