@@ -11,7 +11,7 @@ public class VentanaCredenciales extends JFrame {
 
     private JPanel panelFunciones;
 
-    public VentanaCredenciales(ComBD conn, InicioDeSesionUI inicioDeSesionUI) {
+    public VentanaCredenciales(ComBD conn, InicioDeSesionUI inicioDeSesionUI, String nombreUser, String rolesDelUsuarioStr) {
         setTitle("Detalles del Rol de Usuario");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setPreferredSize(new Dimension(600, 400));
@@ -22,7 +22,6 @@ public class VentanaCredenciales extends JFrame {
             @Override
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
-                // Ajusta la imagen de fondo al tamaño del panel
                 ImageIcon backgroundImage = new ImageIcon("recursos/fondo.jpg");
                 g.drawImage(backgroundImage.getImage(), 0, 0, this.getWidth(), this.getHeight(), null);
             }
@@ -31,7 +30,7 @@ public class VentanaCredenciales extends JFrame {
         panelPrincipal.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
         JPanel panelNombreRol = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
-        JLabel labelNombreRol = new JLabel("Nombre Completo");
+        JLabel labelNombreRol = new JLabel("Usuario: "+ nombreUser+"\n"+"           " +"Roles: "+rolesDelUsuarioStr);
         panelNombreRol.add(labelNombreRol);
         panelPrincipal.add(panelNombreRol);
 
@@ -43,7 +42,7 @@ public class VentanaCredenciales extends JFrame {
                 JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
                 JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         scrollPane.setBorder(BorderFactory.createTitledBorder("Funciones Permitidas"));
-        scrollPane.setPreferredSize(new Dimension(580, 200)); // Puedes ajustar esto según necesites
+        scrollPane.setPreferredSize(new Dimension(580, 200));
 
         panelPrincipal.add(scrollPane);
         panelPrincipal.add(Box.createVerticalStrut(5));

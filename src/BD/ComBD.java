@@ -139,5 +139,34 @@ public class ComBD {
             }
             return listaFunciones;
         }
+    public String obtenerRolesUsuario(int id_user) {
+        ArrayList<String> listaRoles = new ArrayList<>();
+        PreparedStatement textoQuery = null;
+        ResultSet resultSet = null;
+        String res = "";
+        try {
+            String consulta = "select * from get_rols(?)"; // Notice the '*' to retrieve all columns
+            textoQuery = connection.prepareStatement(consulta);
+            textoQuery.setInt(1, id_user);
+            resultSet = textoQuery.executeQuery();
+            while (resultSet.next()) {
+                String roles = resultSet.getString("rol_usr");
+                listaRoles.add(roles);
+            }
 
+            for (int i = 0; i < listaRoles.size(); i++) {
+                if (i < listaRoles.size() - 1) {
+                    res = res + listaRoles.get(i) + ", ";
+                } else {
+                    res = res + listaRoles.get(i);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return res;
+    }
 }
+
+

@@ -76,9 +76,9 @@ public class InicioDeSesionUI extends JFrame {
                     JOptionPane.showMessageDialog(InicioDeSesionUI.this, "usuario encontrado");
                     //Alf ventanaUIS de credenciales
                     ArrayList<String> listafunciones= conn.obtener_nombre_ui_por_usuario(id_usr);
-                    //mandar la ArrayList
-                    VentanaCredenciales ventanaCredenciales= new VentanaCredenciales(conn,InicioDeSesionUI.this);
-                    //dispose();
+                    String rolesDelUsuarioSTR= conn.obtenerRolesUsuario(id_usr);
+                    VentanaCredenciales ventanaCredenciales= new VentanaCredenciales(conn,InicioDeSesionUI.this,usuarioField.getText(),rolesDelUsuarioSTR);
+                    System.out.println(rolesDelUsuarioSTR);
                     ventanaCredenciales.cargarFunciones(listafunciones);
                     ventanaCredenciales.pack();
                     ventanaCredenciales.setLocationRelativeTo(null);
