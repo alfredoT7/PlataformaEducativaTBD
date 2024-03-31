@@ -164,7 +164,6 @@ public class ComBD {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
         return res;
     }
 }

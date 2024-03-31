@@ -4,14 +4,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Random;
 import BD.ComBD;
-
 public class InicioDeSesionUI extends JFrame {
     private JTextField usuarioField;
     private JTextField contraseñaField;
@@ -77,7 +71,7 @@ public class InicioDeSesionUI extends JFrame {
                     //Alf ventanaUIS de credenciales
                     ArrayList<String> listafunciones= conn.obtener_nombre_ui_por_usuario(id_usr);
                     String rolesDelUsuarioSTR= conn.obtenerRolesUsuario(id_usr);
-                    VentanaCredenciales ventanaCredenciales= new VentanaCredenciales(conn,InicioDeSesionUI.this,usuarioField.getText(),rolesDelUsuarioSTR);
+                    VentanaCredenciales ventanaCredenciales= new VentanaCredenciales(conn,InicioDeSesionUI.this,usuarioField.getText(),rolesDelUsuarioSTR, login);
                     System.out.println(rolesDelUsuarioSTR);
                     ventanaCredenciales.cargarFunciones(listafunciones);
                     ventanaCredenciales.pack();
