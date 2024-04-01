@@ -11,7 +11,10 @@ import java.sql.SQLException;
 import java.util.Random;
 
 import BD.ComBD;
-
+/*
+El registro de este codigo tiene que complementarse, faltan demasiados campos para lograr este objetivo, por lo tanto intentamos solucionarlo
+en los días que vendran, por el momento la propuesta se quedará en pie.
+ */
 public class RegistroUI extends JFrame {
     private JTextField usuarioField;
     private JTextField contraseñaField;

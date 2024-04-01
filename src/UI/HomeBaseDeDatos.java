@@ -10,7 +10,7 @@ import UI.*;
 public class HomeBaseDeDatos extends JFrame {
     private ComBD conn= new ComBD();
     public HomeBaseDeDatos() {
-        setTitle("Inicio de Sesión");
+        setTitle("Opciones de Sesión");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(600, 500);
         setLocationRelativeTo(null);
@@ -44,7 +44,7 @@ public class HomeBaseDeDatos extends JFrame {
             }
         });
         panel.add(iniciarSesionBoton, gbc);
-
+        /*
         JButton registrarseBoton = new JButton("Registrarse");
         registrarseBoton.setPreferredSize(new Dimension(150, 30));
         registrarseBoton.addActionListener(new ActionListener() {
@@ -55,7 +55,7 @@ public class HomeBaseDeDatos extends JFrame {
             }
         });
         panel.add(registrarseBoton, gbc);
-
+        */
         add(panel);
         setVisible(true);
     }

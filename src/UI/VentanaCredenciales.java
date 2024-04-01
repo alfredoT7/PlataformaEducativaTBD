@@ -10,8 +10,11 @@ import java.util.ArrayList;
 public class VentanaCredenciales extends JFrame {
 
     private JPanel panelFunciones;
-
-    public VentanaCredenciales(ComBD conn, InicioDeSesionUI inicioDeSesionUI, String nombreUser, String rolesDelUsuarioStr) {
+    ComBD conn;
+    HomeBaseDeDatos login;
+    public VentanaCredenciales(ComBD conn, InicioDeSesionUI inicioDeSesionUI, String nombreUser, String rolesDelUsuarioStr, HomeBaseDeDatos login) {
+        this.conn=conn;
+        this.login=login;
         setTitle("Detalles del Rol de Usuario");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setPreferredSize(new Dimension(600, 400));
@@ -47,18 +50,20 @@ public class VentanaCredenciales extends JFrame {
         panelPrincipal.add(scrollPane);
         panelPrincipal.add(Box.createVerticalStrut(5));
 
-        JButton irAtrasBoton = new JButton("Ir ATRAS");
-        irAtrasBoton.setAlignmentX(Component.CENTER_ALIGNMENT);
-        panelPrincipal.add(irAtrasBoton);
+        JButton volverBoton = new JButton("Ir ATRAS");
+        volverBoton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        panelPrincipal.add(volverBoton);
         getContentPane().add(panelPrincipal);
         pack();
         setLocationRelativeTo(null);
 
-        irAtrasBoton.addActionListener(new ActionListener() {
+        volverBoton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                inicioDeSesionUI.setVisible(true);
+                HomeBaseDeDatos newHome = new HomeBaseDeDatos();
+                newHome.setVisible(true);
                 setVisible(false);
+                eliminarInstancias();
             }
         });
     }
@@ -84,5 +89,10 @@ public class VentanaCredenciales extends JFrame {
         for (String funcion : funciones) {
             aniadirFuncion(funcion, "Ir...");
         }
+    }
+    private void eliminarInstancias() {
+        login = null;
+        conn = null;
+        System.gc();
     }
 }
