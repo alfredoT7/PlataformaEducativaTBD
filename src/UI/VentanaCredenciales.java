@@ -89,6 +89,7 @@ public class VentanaCredenciales extends JFrame {
             case "UI Subir Tareas":
                 ventana = new VentanaSubirTareas();
                 setVisible(false);
+                pack();
                 ventana.setVisible(true);
                 break;
             case "UI Escribir Comentarios":
