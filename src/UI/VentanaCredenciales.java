@@ -10,9 +10,11 @@ import java.util.ArrayList;
 public class VentanaCredenciales extends JFrame {
 
     private JPanel panelFunciones;
+    private ArrayList<String> listaUINoPermitidas;
     ComBD conn;
     HomeBaseDeDatos login;
-    public VentanaCredenciales(ComBD conn, InicioDeSesionUI inicioDeSesionUI, String nombreUser, String rolesDelUsuarioStr, HomeBaseDeDatos login) {
+    public VentanaCredenciales(ComBD conn, InicioDeSesionUI inicioDeSesionUI, String nombreUser, String rolesDelUsuarioStr, HomeBaseDeDatos login, ArrayList<String> listaUINoPermitidas) {
+        this.listaUINoPermitidas=listaUINoPermitidas;
         this.conn=conn;
         this.login=login;
         setTitle("Detalles del Rol de Usuario");
@@ -46,7 +48,17 @@ public class VentanaCredenciales extends JFrame {
                 JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         scrollPane.setBorder(BorderFactory.createTitledBorder("Funciones Permitidas"));
         scrollPane.setPreferredSize(new Dimension(580, 200));
-
+        //
+        panelFunciones.add(Box.createVerticalStrut(10));
+        for (String uiNoPermitida : listaUINoPermitidas) {
+            JButton boton = new JButton(uiNoPermitida);
+            boton.setEnabled(false); // Deshabilitar el botón
+            boton.setForeground(new Color(170, 170, 170)); // Estilo de marca de agua
+            panelFunciones.add(boton);
+        }
+        panelFunciones.revalidate();
+        panelFunciones.repaint();
+        //a prubaa
         panelPrincipal.add(scrollPane);
         panelPrincipal.add(Box.createVerticalStrut(5));
 
@@ -73,6 +85,7 @@ public class VentanaCredenciales extends JFrame {
         panelFunciones.add(panel);
         panelFunciones.revalidate();
         panelFunciones.repaint();
+
     }
 
     private JPanel crearPanelFuncion(String nombreFuncion, String textoBoton) {
@@ -80,14 +93,23 @@ public class VentanaCredenciales extends JFrame {
         panel.setLayout(new FlowLayout(FlowLayout.CENTER));
         JLabel label = new JLabel(nombreFuncion);
         JButton boton = new JButton(textoBoton);
+
+        if (textoBoton.equals("Inhabilitado...")) {
+            boton.setEnabled(false);
+
+        }
         panel.add(label);
         panel.add(boton);
         return panel;
     }
-    public void cargarFunciones(ArrayList<String> funciones) {
+    public void cargarFunciones(ArrayList<String> funciones, ArrayList<String> listaUINoPermitidas) {
         panelFunciones.removeAll();
         for (String funcion : funciones) {
             aniadirFuncion(funcion, "Ir...");
+
+        }
+        for(String funNP : listaUINoPermitidas) {
+            aniadirFuncion(funNP,"Inhabilitado...");
         }
     }
     private void eliminarInstancias() {
