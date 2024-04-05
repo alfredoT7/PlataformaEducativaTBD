@@ -62,7 +62,7 @@ from (select funcionui.id_ui
 	where funcionui.id_funcion=tres.id_funcion
 ) cuatro, ui
 where ui.id_ui= cuatro.id_ui
-
+---consulta
 
 
 --consulta
@@ -75,6 +75,12 @@ select funcionui.id_ui
 			  where rol_usuario.id_user=uno.id_user) dos, rol_funcion
 		 where rol_funcion.id_rol=dos.id_rol) tres, funcionui
 	where funcionui.id_funcion=tres.id_funcion
+
+
+
+
+
+
 
 SELECT * FROM USUARIO;
 

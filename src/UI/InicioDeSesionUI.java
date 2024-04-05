@@ -6,6 +6,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import BD.ComBD;
+import org.postgresql.jdbc2.ArrayAssistant;
+
 public class InicioDeSesionUI extends JFrame {
     private JTextField usuarioField;
     private JTextField contraseñaField;
@@ -69,11 +71,16 @@ public class InicioDeSesionUI extends JFrame {
                     conn.insertarPIDEnSesion(aPID,id_usr);
                     JOptionPane.showMessageDialog(InicioDeSesionUI.this, "usuario encontrado");
                     //Alf ventanaUIS de credenciales
-                    ArrayList<String> listafunciones= conn.obtener_nombre_ui_por_usuario(id_usr);
+                    ArrayList<String> listaTodasFunciones = conn.obtener_todas_las_ui();
+                    ArrayList<String> listafuncionesUser= conn.obtener_nombre_ui_por_usuario(id_usr);
                     String rolesDelUsuarioSTR= conn.obtenerRolesUsuario(id_usr);
-                    VentanaCredenciales ventanaCredenciales= new VentanaCredenciales(conn,InicioDeSesionUI.this,usuarioField.getText(),rolesDelUsuarioSTR, login);
+                    ArrayList<String> listaUINoPermitidas=conn.uiNOPermitidas(id_usr);
+                    VentanaCredenciales ventanaCredenciales= new VentanaCredenciales(conn,InicioDeSesionUI.this,usuarioField.getText(),rolesDelUsuarioSTR, login, listaUINoPermitidas);
                     System.out.println(rolesDelUsuarioSTR);
-                    ventanaCredenciales.cargarFunciones(listafunciones);
+                    /**
+                     * LAS funciones se enviaran a cargar funciones
+                     */
+                    ventanaCredenciales.cargarFunciones(listafuncionesUser,listaUINoPermitidas);
                     ventanaCredenciales.pack();
                     ventanaCredenciales.setLocationRelativeTo(null);
                     ventanaCredenciales.setVisible(true);
@@ -91,4 +98,6 @@ public class InicioDeSesionUI extends JFrame {
             }
         });
     }
+
+
 }

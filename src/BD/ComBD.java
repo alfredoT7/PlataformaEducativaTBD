@@ -116,6 +116,41 @@ public class ComBD {
                 e.printStackTrace();
             }
         }
+        public ArrayList<String> obtener_todas_las_ui(){
+            ArrayList<String> listaTodosLasUI = new ArrayList<>();
+            PreparedStatement textoQuery = null;
+            ResultSet resultSet=null;
+            try{
+                String consulta = "Select nombre_ui from ui";
+                textoQuery=connection.prepareStatement(consulta);
+                resultSet=textoQuery.executeQuery();
+                while(resultSet.next()){
+                    String ui = resultSet.getString("nombre_ui");
+                    listaTodosLasUI.add(ui);
+                }
+            }catch (SQLException e){
+                e.printStackTrace();
+            }
+            return listaTodosLasUI;
+        }
+        public ArrayList<String> uiNOPermitidas(int id_user){
+            ArrayList<String> uiNOPermitidasList= new ArrayList();
+            PreparedStatement textoQuery= null;
+            ResultSet resultSet= null;
+            try {
+                String consulta= "select ui_no_permitida(?);";
+                textoQuery=connection.prepareStatement(consulta);
+                textoQuery.setInt(1,id_user);
+                resultSet=textoQuery.executeQuery();
+                while(resultSet.next()){
+                    String uiNP=resultSet.getString("ui_no_permitida");
+                    uiNOPermitidasList.add(uiNP);
+                }
+            }catch (SQLException e){
+                e.printStackTrace();
+            }
+            return uiNOPermitidasList;
+        }
         public ArrayList<String> obtener_nombre_ui_por_usuario(int id_user){
             ArrayList<String> listaFunciones = new ArrayList<>();
             PreparedStatement textoQuery = null;
@@ -125,14 +160,11 @@ public class ComBD {
                 textoQuery=connection.prepareStatement(consulta);
                 textoQuery.setInt(1,id_user);
                 resultSet=textoQuery.executeQuery();
-                //int i=1;
                 while (resultSet.next()){
 
                     String funcion = resultSet.getString("obtener_nombre_ui_por_usuario");
-                    //i++;
                     listaFunciones.add(funcion);
                 }
-                //return listaFunciones;
 
             }catch (SQLException e){
                 e.printStackTrace();
@@ -145,12 +177,12 @@ public class ComBD {
         ResultSet resultSet = null;
         String res = "";
         try {
-            String consulta = "select * from get_rols(?)"; // Notice the '*' to retrieve all columns
+            String consulta = "select get_rols(?)";
             textoQuery = connection.prepareStatement(consulta);
             textoQuery.setInt(1, id_user);
             resultSet = textoQuery.executeQuery();
             while (resultSet.next()) {
-                String roles = resultSet.getString("rol_usr");
+                String roles = resultSet.getString("get_rols");
                 listaRoles.add(roles);
             }
 
@@ -166,6 +198,7 @@ public class ComBD {
         }
         return res;
     }
+
 }
 
 
