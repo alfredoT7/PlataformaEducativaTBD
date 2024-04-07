@@ -5,7 +5,8 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class ComBD {
-    private static final String url="jdbc:postgresql://localhost:5432/Plataforma&Seg";
+    //private static final String url="jdbc:postgresql://localhost:5432/Plataforma&Seg";
+    private static final String url="jdbc:postgresql://localhost:5432/TBDplat";
     private static final String user="alfredo";
     private static final String contraseña="notebok456";
     private Connection connection;

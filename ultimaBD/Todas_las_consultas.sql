@@ -1,0 +1,53 @@
+-- Para la tabla COMENTARIO
+SELECT * FROM COMENTARIO;
+
+-- Para la tabla DOCENTE
+SELECT * FROM DOCENTE;
+
+-- Para la tabla ENTREGA
+SELECT * FROM ENTREGA;
+
+-- Para la tabla ESTUDIANTE
+SELECT * FROM ESTUDIANTE;
+
+-- Para la tabla FUNCION
+SELECT * FROM FUNCION;
+
+-- Para la tabla FUNCION_UI
+SELECT * FROM FUNCION_UI;
+
+-- Para la tabla GRADO_ACADEMICO
+SELECT * FROM GRADO_ACADEMICO;
+
+-- Para la tabla LICENCIATURA
+SELECT * FROM LICENCIATURA;
+
+-- Para la tabla MATERIA
+SELECT * FROM MATERIA;
+
+-- Para la tabla ROL
+SELECT * FROM ROL;
+
+-- Para la tabla ROL_FUNCION
+SELECT * FROM ROL_FUNCION;
+
+-- Para la tabla ROL_USUARIO
+SELECT * FROM ROL_USUARIO;
+
+-- Para la tabla SESION
+SELECT * FROM SESION;
+
+-- Para la tabla TAREA
+SELECT * FROM TAREA;
+
+-- Para la tabla TIPO_ARCHIVO
+SELECT * FROM TIPO_ARCHIVO;
+
+-- Para la tabla UI
+SELECT * FROM UI;
+
+-- Para la tabla USUARIO
+SELECT * FROM USUARIO;
+
+
+

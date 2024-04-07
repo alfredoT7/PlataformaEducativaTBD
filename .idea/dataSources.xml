@@ -8,5 +8,12 @@
       <jdbc-url>jdbc:postgresql://localhost:5432/Plataforma%26Seg</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
+    <data-source source="LOCAL" name="TBDplat@localhost" uuid="dbbda213-307c-4713-b437-2fc0a66eabbf">
+      <driver-ref>postgresql</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.postgresql.Driver</jdbc-driver>
+      <jdbc-url>jdbc:postgresql://localhost:5432/TBDplat</jdbc-url>
+      <working-dir>$ProjectFileDir$</working-dir>
+    </data-source>
   </component>
 </project>
