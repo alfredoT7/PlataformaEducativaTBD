@@ -1,18 +1,16 @@
 package UI.PostCredenciales;
 
-import UI.VentanaCredenciales;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 
-public class VentanaSubirTareas extends JFrame {
+public class VerTareaUI extends JFrame {
         private JButton btnSubirArchivo;
         private JLabel lblArchivoSeleccionado;
 
-        public VentanaSubirTareas() {
+        public VerTareaUI() {
             setLocationRelativeTo(null);
             setTitle("Subir Tareas");
             setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

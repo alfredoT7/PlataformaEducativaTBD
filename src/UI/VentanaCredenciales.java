@@ -1,7 +1,6 @@
 package UI;
 import BD.ComBD;
-import UI.PostCredenciales.VentanaSubirTareas;
-import UI.PostCredenciales.VentanaEscribirComentarios;
+import UI.PostCredenciales.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -86,14 +85,53 @@ public class VentanaCredenciales extends JFrame {
     private void abrirVentanaParaFuncion(String funcion) {
         JFrame ventana = null;
         switch (funcion) {
-            case "UI Subir Tareas":
-                ventana = new VentanaSubirTareas();
+            case "Ver Tarea":
+                ventana = new VerTareaUI();
                 setVisible(false);
-                pack();
+                //pack();
                 ventana.setVisible(true);
+                ventana.setLocationRelativeTo(null);
                 break;
-            case "UI Escribir Comentarios":
-                ventana = new VentanaEscribirComentarios();
+            case "Crear Tarea":
+                ventana = new CrearTareaUI();
+                setVisible(false);
+                ventana.setVisible(true);
+                ventana.setLocationRelativeTo(null);
+                break;
+            case "Subir Tarea":
+                ventana = new SubirTareaUI();
+                setVisible(false);
+                ventana.setVisible(true);
+                ventana.setLocationRelativeTo(null);
+                break;
+            case "Ver Registro Estudiante":
+                ventana = new VerRegistroEstudianteUI();
+                setVisible(false);
+                ventana.setVisible(true);
+                ventana.setLocationRelativeTo(null);
+                break;
+            case "Calificar Tarea":
+                ventana = new CalificarTareaUI();
+                setVisible(false);
+                ventana.setVisible(true);
+                ventana.setLocationRelativeTo(null);
+                break;
+            case "Ver Materias Inscrito":
+                ventana = new VerMateriasInscritoUI();
+                setVisible(false);
+                ventana.setVisible(true);
+                ventana.setLocationRelativeTo(null);
+                break;
+            case "Ver Materias Dictadas":
+
+                break;
+            case "Ver Tareas Entregadas":
+                break;
+            case "Generar Reporte Est":
+                break;
+            case "Actualizar Datos del EST":
+                break;
+            case "Crear Usuario Estudiante":
                 break;
             // ... otros casosasd
         }
