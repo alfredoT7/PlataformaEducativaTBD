@@ -86,7 +86,7 @@ public class VentanaCredenciales extends JFrame {
         JFrame ventana = null;
         switch (funcion) {
             case "Ver Tarea":
-                ventana = new VerTareaUI();
+                ventana = new VerTareaUI(VentanaCredenciales.this, conn);
                 setVisible(false);
                 //pack();
                 ventana.setVisible(true);

@@ -1,5 +1,9 @@
 package UI.PostCredenciales;
 
+import BD.ComBD;
+import UI.HomeBaseDeDatos;
+import UI.VentanaCredenciales;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -10,7 +14,7 @@ public class VerTareaUI extends JFrame {
         private JButton btnSubirArchivo;
         private JLabel lblArchivoSeleccionado;
 
-        public VerTareaUI() {
+        public VerTareaUI(VentanaCredenciales ventanaCredenciales, ComBD conn) {
             setLocationRelativeTo(null);
             setTitle("Subir Tareas");
             setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -42,10 +46,19 @@ public class VerTareaUI extends JFrame {
                     }
                 }
             });
-
-            // Etiqueta para mostrar el archivo seleccionado
+            JButton volverBoton = new JButton("Volver");
+            volverBoton.setAlignmentX(Component.CENTER_ALIGNMENT);
+            panel.add(volverBoton);
+            getContentPane().add(panel);
+            pack();
+            setLocationRelativeTo(null);
+            volverBoton.addActionListener(e -> {
+                HomeBaseDeDatos newHome = new HomeBaseDeDatos();
+                newHome.setVisible(true);
+                setVisible(false);
+            });
             lblArchivoSeleccionado = new JLabel("Ningún archivo seleccionado");
-
+            System.out.println("Hola ALFREDO");
             // Añadir componentes al panel
             panel.add(btnSubirArchivo);
             panel.add(lblArchivoSeleccionado);
@@ -53,5 +66,10 @@ public class VerTareaUI extends JFrame {
             // Añadir panel al frame
             this.add(panel);
         }
+        //////////
+    /////////////////
+    ///////////////////
+    ////este es un comentario
+
 }
 
