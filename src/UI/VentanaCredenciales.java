@@ -2,6 +2,8 @@ package UI;
 import BD.ComBD;
 import UI.PostCredenciales.Docente.CrearClaseVirtualUI;
 import UI.PostCredenciales.Docente.MostrarMateriasDictadasUI;
+import UI.PostCredenciales.Estudiante.InscripcionMateriaUI;
+import UI.PostCredenciales.Estudiante.VerClasesInscritoUI;
 //import UI.PostCredenciales.*;
 
 import javax.swing.*;
@@ -95,6 +97,7 @@ public class VentanaCredenciales extends JFrame {
             case "Ver Detalles de Tarea":
                 break;
             case "Ver Clases Inscrito":
+                VerClasesInscritoUI verClasesInscritoUI= new VerClasesInscritoUI(conn,id_user);
                 break;
             case "Ver Detalles Materia":
                 break;
@@ -124,12 +127,14 @@ public class VentanaCredenciales extends JFrame {
                 break;
             case "Ver Datos del Estudiante":
                 break;
-            // ... otros casosasd
+            case "Inscripcion Materia":
+                InscripcionMateriaUI inscripcionMateriaUI = new InscripcionMateriaUI(conn,id_user,this);
+                setVisible(false);
+                inscripcionMateriaUI.setVisible(true);
+                break;
+
         }
-        if (ventana != null) {
-            ventana.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-            ventana.setVisible(true);
-        }
+
     }
     public void cargarFunciones(ArrayList<String> listaUIPermitidas, ArrayList<String> listaUINoPermitidas) {
         panelFunciones.removeAll();

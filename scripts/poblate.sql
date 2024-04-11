@@ -96,3 +96,41 @@ BEGIN
     (_id_materia, _id_docente, _id_tarea, _periodo_acad);
 END;
 $$ LANGUAGE plpgsql;
+
+
+INSERT INTO INSCRIPCION (id_materia, id_docente, id_estudiante, periodo_academico) VALUES (1, 5, 1, 'I-2024');
+INSERT INTO INSCRIPCION (id_materia, id_docente, id_estudiante, periodo_academico) VALUES (3, 5, 1, 'I-2024');
+INSERT INTO INSCRIPCION (id_materia, id_docente, id_estudiante, periodo_academico) VALUES (5, 6, 1, 'I-2024');
+
+INSERT INTO INSCRIPCION (id_materia, id_docente, id_estudiante, periodo_academico) VALUES (2, 5, 2, 'I-2024');
+INSERT INTO INSCRIPCION (id_materia, id_docente, id_estudiante, periodo_academico) VALUES (4, 5, 2, 'I-2024');
+INSERT INTO INSCRIPCION (id_materia, id_docente, id_estudiante, periodo_academico) VALUES (6, 6, 2, 'I-2024');
+
+INSERT INTO INSCRIPCION (id_materia, id_docente, id_estudiante, periodo_academico) VALUES (3, 5, 3, 'I-2024');
+INSERT INTO INSCRIPCION (id_materia, id_docente, id_estudiante, periodo_academico) VALUES (7, 6, 3, 'I-2024');
+INSERT INTO INSCRIPCION (id_materia, id_docente, id_estudiante, periodo_academico) VALUES (9, 7, 3, 'I-2024');
+
+INSERT INTO INSCRIPCION (id_materia, id_docente, id_estudiante, periodo_academico) VALUES (4, 5, 4, 'I-2024');
+INSERT INTO INSCRIPCION (id_materia, id_docente, id_estudiante, periodo_academico) VALUES (8, 7, 4, 'I-2024');
+INSERT INTO INSCRIPCION (id_materia, id_docente, id_estudiante, periodo_academico) VALUES (11, 5, 4, 'I-2024');
+
+
+select nombre_materia 
+	from(select id_materia, id_docente from inscripcion 
+		where id_estudiante=1) uno, materia
+where materia.id_materia=uno.id_materia and materia.id_docente=uno.id_docente
+
+CREATE OR REPLACE FUNCTION obtener_nombre_materia_por_estudiante(_id_estudiante INTEGER)
+RETURNS TABLE(nombre_materia VARCHAR) AS $$
+BEGIN
+    RETURN QUERY
+    SELECT m.nombre_materia
+    FROM (
+        SELECT i.id_materia, i.id_docente
+        FROM inscripcion i
+        WHERE i.id_estudiante = _id_estudiante
+    ) uno
+    INNER JOIN materia m ON m.id_materia = uno.id_materia AND m.id_docente = uno.id_docente;
+END;
+$$ LANGUAGE plpgsql;
+SELECT obtener_nombre_materia_por_estudiante(1);

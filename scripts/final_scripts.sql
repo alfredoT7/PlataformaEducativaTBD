@@ -1,10 +1,10 @@
-CREATE FUNCTION get_id_usuario22(nombre_usuariop character varying(20), contrasena_usuario character varying(50))
+CREATE FUNCTION get_id_usuario22(nombre_usuario character varying(20), contrasena_usuario character varying(50))
 RETURNS INT AS
 $$
 DECLARE
     id_usuario INT;
 BEGIN
-    SELECT id_usern INTO id_usuario FROM usuario WHERE nombre_usuario=nombre_usuariop AND contrasenia=contrasena_usuario;
+    SELECT id_usern INTO id_usuario FROM usuario WHERE nombre=nombre_usuario AND contrasenia=contrasena_usuario;
     RETURN id_usuario;
 END;
 $$
@@ -40,7 +40,7 @@ CREATE OR REPLACE FUNCTION obtener_nombre_ui_por_usuario(p_id_user INT)
 RETURNS TABLE(nombre_ui VARCHAR) AS $$
 BEGIN
     RETURN QUERY 
-    SELECT ui.nombre_ui 
+    SELECT DISTINCT ui.nombre_ui 
     FROM (SELECT funcion_ui.id_ui
           FROM (SELECT rol_funcion.id_funcion
                 FROM (SELECT rol_usuario.id_rol

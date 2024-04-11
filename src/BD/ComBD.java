@@ -269,8 +269,53 @@ public class ComBD {
         }catch (SQLException e){
             e.printStackTrace();
         }
-
-
+    }
+    public ArrayList<String> obtener_nombre_materia_por_estudiante(int id_est){
+        ArrayList<String> listaMateriasInscrito = new ArrayList<>();
+        PreparedStatement textoQuery = null;
+        ResultSet resultSet = null;
+        try {
+            String consulta="select obtener_nombre_materia_por_estudiante(?);";
+            textoQuery=connection.prepareStatement(consulta);
+            textoQuery.setInt(1,id_est);
+            resultSet=textoQuery.executeQuery();
+            while (resultSet.next()) {
+                String mat = resultSet.getString("obtener_nombre_materia_por_estudiante");
+                listaMateriasInscrito.add(mat);
+            }
+        }catch (SQLException e ){e.printStackTrace();}
+        return listaMateriasInscrito;
+    }
+    public ArrayList<String> obtener_materia_docente_por_estudiante_excluyendo(int id_est){
+        ArrayList<String> listaMateriasNoInscrito = new ArrayList<>();
+        PreparedStatement textoQuery = null;
+        ResultSet resultSet = null;
+        try{
+            String consulta="select obtener_materia_docente_por_estudiante_excluyendo(?)";
+            textoQuery=connection.prepareStatement(consulta);
+            textoQuery.setInt(1,id_est);
+            resultSet=textoQuery.executeQuery();
+            while (resultSet.next()) {
+                String mat = resultSet.getString("obtener_materia_docente_por_estudiante_excluyendo");
+                listaMateriasNoInscrito.add(mat);
+            }
+        }catch (SQLException e){e.printStackTrace();}
+        return listaMateriasNoInscrito;
+    }
+    public void insertar_inscripcion(int id_materia, int id_docente, int id_est, String periodo_acad){
+        PreparedStatement textoQuery = null;
+        ResultSet resultSet = null;
+        try{
+            String consulta="select insertar_inscripcion(?, ?, ?, ?);";
+            textoQuery= connection.prepareStatement(consulta);
+            textoQuery.setInt(1,id_materia);
+            textoQuery.setInt(2,id_docente);
+            textoQuery.setInt(3,id_est);
+            textoQuery.setString(4,periodo_acad);
+            textoQuery.execute();
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
     }
 
 }
