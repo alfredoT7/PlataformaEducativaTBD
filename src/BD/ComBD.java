@@ -6,8 +6,8 @@ import java.util.Random;
 
 public class ComBD {
     //private static final String url="jdbc:postgresql://localhost:5432/Plataforma&Seg";
-    private static final String url="jdbc:postgresql://localhost:5432/TBDplat";
-    private static final String user="alfredo";
+    private static final String url="jdbc:postgresql://localhost:5432/TBDplatLast";
+    private static final String user="postgres";
     private static final String contraseña="notebok456";
     private Connection connection;
     public ComBD() {
@@ -101,14 +101,14 @@ public class ComBD {
             Random rand = new Random();
             int id_sesion= rand.nextInt(10000)+1;
             try{
-                String consulta = "select insertar_sesion(?,?,?,?,?);";
+                String consulta = "select insertar_sesion(?,?,?,?);";
                 textoQuery=connection.prepareStatement(consulta);
                 textoQuery.setInt(1,id_user);
-                textoQuery.setInt(2,id_sesion);
-                textoQuery.setInt(3,PID);
+                //textoQuery.setInt(2,id_sesion);
+                textoQuery.setInt(2,PID);
                 //se puede cambiar
-                textoQuery.setTimestamp(4,new Timestamp(System.currentTimeMillis()));
-                textoQuery.setDate(5, new java.sql.Date(System.currentTimeMillis()));
+                textoQuery.setTimestamp(3,new Timestamp(System.currentTimeMillis()));
+                textoQuery.setDate(4, new java.sql.Date(System.currentTimeMillis()));
                 textoQuery.execute();
                 System.out.println("SE LOGRO INSERTAR");
                 System.out.println(new java.sql.Date(System.currentTimeMillis()));
@@ -198,6 +198,124 @@ public class ComBD {
             e.printStackTrace();
         }
         return res;
+    }
+    public void insertarMateria(int id_doc, String nombre_mat, String descrip){
+        PreparedStatement textoQuery = null;
+        ResultSet resultSet = null;
+        try{
+            String consulta="select insertar_materia(?,?,?);";
+            textoQuery=connection.prepareStatement(consulta);
+            textoQuery.setInt(1,id_doc);
+            textoQuery.setString(2,nombre_mat);
+            textoQuery.setString(3,descrip);
+            textoQuery.execute();
+            System.out.println("Materia INSERTADO");
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+    }
+    public ArrayList<String> obtener_materias_por_docente(int id_docente){
+        ArrayList<String> listaMateriasxDoc = new ArrayList<>();
+        PreparedStatement textoQuery = null;
+        ResultSet resultSet = null;
+        try{
+            String consulta="select obtener_materias_por_docente(?);";
+            textoQuery=connection.prepareStatement(consulta);
+            textoQuery.setInt(1,id_docente);
+            resultSet=textoQuery.executeQuery();
+            while (resultSet.next()){
+                String mat = resultSet.getString("obtener_materias_por_docente");
+                listaMateriasxDoc.add(mat);
+            }
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+        return listaMateriasxDoc;
+    }
+    public int crearTarea(String nombreTarea, Date fechaAsignacion, Date fechaEntrega, String descripcionTarea) {
+        int tareaId = -1;
+        PreparedStatement textoQuery = null;
+        ResultSet resultSet = null;
+        try {
+            String consulta = "SELECT insertar_tarea(?, ?, ?, ?)";
+            textoQuery = connection.prepareStatement(consulta);
+            textoQuery.setString(1, nombreTarea);
+            textoQuery.setDate(2, new java.sql.Date(fechaAsignacion.getTime()));
+            textoQuery.setDate(3, new java.sql.Date(fechaEntrega.getTime()));
+            textoQuery.setString(4, descripcionTarea);
+
+            // Ejecutar la consulta y obtener el id de la tarea.
+            resultSet= textoQuery.executeQuery();
+            if (resultSet.next()) {
+                tareaId = resultSet.getInt(1); // Obtener el primer campo del resultado, que es el id de la tarea.
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return tareaId;
+    }
+    public void insertar_materia_tarea(int id_materia, int id_docente, int id_tarea, String periodo_acad){
+        PreparedStatement textoQuery = null;
+        ResultSet resultSet = null;
+        try{
+            String consulta="select insertar_materia_tarea(?,?,?,?);";
+            textoQuery=connection.prepareStatement(consulta);
+            textoQuery.setInt(1,id_materia);
+            textoQuery.setInt(2,id_docente);
+            textoQuery.setInt(3,id_tarea);
+            textoQuery.setString(4,periodo_acad);
+            textoQuery.execute();
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+    }
+    public ArrayList<String> obtener_nombre_materia_por_estudiante(int id_est){
+        ArrayList<String> listaMateriasInscrito = new ArrayList<>();
+        PreparedStatement textoQuery = null;
+        ResultSet resultSet = null;
+        try {
+            String consulta="select obtener_nombre_materia_por_estudiante(?);";
+            textoQuery=connection.prepareStatement(consulta);
+            textoQuery.setInt(1,id_est);
+            resultSet=textoQuery.executeQuery();
+            while (resultSet.next()) {
+                String mat = resultSet.getString("obtener_nombre_materia_por_estudiante");
+                listaMateriasInscrito.add(mat);
+            }
+        }catch (SQLException e ){e.printStackTrace();}
+        return listaMateriasInscrito;
+    }
+    public ArrayList<String> obtener_materia_docente_por_estudiante_excluyendo(int id_est){
+        ArrayList<String> listaMateriasNoInscrito = new ArrayList<>();
+        PreparedStatement textoQuery = null;
+        ResultSet resultSet = null;
+        try{
+            String consulta="select obtener_materia_docente_por_estudiante_excluyendo(?)";
+            textoQuery=connection.prepareStatement(consulta);
+            textoQuery.setInt(1,id_est);
+            resultSet=textoQuery.executeQuery();
+            while (resultSet.next()) {
+                String mat = resultSet.getString("obtener_materia_docente_por_estudiante_excluyendo");
+                listaMateriasNoInscrito.add(mat);
+            }
+        }catch (SQLException e){e.printStackTrace();}
+        return listaMateriasNoInscrito;
+    }
+    public void insertar_inscripcion(int id_materia, int id_docente, int id_est, String periodo_acad){
+        PreparedStatement textoQuery = null;
+        ResultSet resultSet = null;
+        try{
+            String consulta="select insertar_inscripcion(?, ?, ?, ?);";
+            textoQuery= connection.prepareStatement(consulta);
+            textoQuery.setInt(1,id_materia);
+            textoQuery.setInt(2,id_docente);
+            textoQuery.setInt(3,id_est);
+            textoQuery.setString(4,periodo_acad);
+            textoQuery.execute();
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
     }
 
 }

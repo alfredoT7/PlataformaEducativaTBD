@@ -75,7 +75,7 @@ public class InicioDeSesionUI extends JFrame {
                     ArrayList<String> listafuncionesUser= conn.obtener_nombre_ui_por_usuario(id_usr);
                     String rolesDelUsuarioSTR= conn.obtenerRolesUsuario(id_usr);
                     ArrayList<String> listaUINoPermitidas=conn.uiNOPermitidas(id_usr);
-                    VentanaCredenciales ventanaCredenciales= new VentanaCredenciales(conn,InicioDeSesionUI.this,usuarioField.getText(),rolesDelUsuarioSTR, login, listafuncionesUser,listaUINoPermitidas);
+                    VentanaCredenciales ventanaCredenciales= new VentanaCredenciales(conn,InicioDeSesionUI.this,usuarioField.getText(),rolesDelUsuarioSTR, login, listafuncionesUser,listaUINoPermitidas,id_usr);
                     System.out.println(rolesDelUsuarioSTR);
                     ventanaCredenciales.setVisible(true);
                     setVisible(false);

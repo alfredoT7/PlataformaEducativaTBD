@@ -1,7 +1,10 @@
 package UI;
 import BD.ComBD;
-import UI.PostCredenciales.VentanaSubirTareas;
-import UI.PostCredenciales.VentanaEscribirComentarios;
+import UI.PostCredenciales.Docente.CrearClaseVirtualUI;
+import UI.PostCredenciales.Docente.MostrarMateriasDictadasUI;
+import UI.PostCredenciales.Estudiante.InscripcionMateriaUI;
+import UI.PostCredenciales.Estudiante.VerClasesInscritoUI;
+//import UI.PostCredenciales.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -13,10 +16,13 @@ public class VentanaCredenciales extends JFrame {
 
     private JPanel panelFunciones;
     private Map<String, Runnable> acciones;
+    private int id_user;
+    private ComBD conn;
     //private ArrayList<String> listaUINoPermitidas;
-    ComBD conn;
+    //ComBD conn;
     HomeBaseDeDatos login;
-    public VentanaCredenciales(ComBD conn, InicioDeSesionUI inicioDeSesionUI, String nombreUser, String rolesDelUsuarioStr, HomeBaseDeDatos login, ArrayList<String> listaUIPermitidas, ArrayList<String> listaUINOPermitidas) {
+    public VentanaCredenciales(ComBD conn, InicioDeSesionUI inicioDeSesionUI, String nombreUser, String rolesDelUsuarioStr, HomeBaseDeDatos login, ArrayList<String> listaUIPermitidas, ArrayList<String> listaUINOPermitidas,int id_user) {
+        this.id_user=id_user;
         this.conn = conn;
         this.login = login;
         setLocationRelativeTo(null);
@@ -86,21 +92,49 @@ public class VentanaCredenciales extends JFrame {
     private void abrirVentanaParaFuncion(String funcion) {
         JFrame ventana = null;
         switch (funcion) {
-            case "UI Subir Tareas":
-                ventana = new VentanaSubirTareas();
+            case "Actualizar Datos Personales":
+                break;
+            case "Ver Detalles de Tarea":
+                break;
+            case "Ver Clases Inscrito":
+                VerClasesInscritoUI verClasesInscritoUI= new VerClasesInscritoUI(conn,id_user);
+                break;
+            case "Ver Detalles Materia":
+                break;
+            case "Crear Clase Virtual":
+                CrearClaseVirtualUI cv = new CrearClaseVirtualUI(conn, id_user,VentanaCredenciales.this);
+                cv.setVisible(true);
+                this.setVisible(false);
+                break;
+            case "Mostrar Detalles de Materia":
+                break;
+            case "Mostrar Materias Dictadas":
+                ArrayList<String> listaMateriasDictadas = new ArrayList<>();
+                listaMateriasDictadas=conn.obtener_materias_por_docente(id_user);
+                MostrarMateriasDictadasUI mostrarMateriasDictadasUI = new MostrarMateriasDictadasUI(listaMateriasDictadas,this,conn, id_user);
                 setVisible(false);
-                pack();
-                ventana.setVisible(true);
+                mostrarMateriasDictadasUI.setVisible(true);
                 break;
-            case "UI Escribir Comentarios":
-                ventana = new VentanaEscribirComentarios();
+            case "Crear Usuario Estudiante":
                 break;
-            // ... otros casosasd
+            case "Crear Usuario Docente":
+                break;
+            case "Opciones Modificacion Usuario":
+                break;
+            case "Buscar Usuarios":
+                break;
+            case "Generar Reportes del Alumno":
+                break;
+            case "Ver Datos del Estudiante":
+                break;
+            case "Inscripcion Materia":
+                InscripcionMateriaUI inscripcionMateriaUI = new InscripcionMateriaUI(conn,id_user,this);
+                setVisible(false);
+                inscripcionMateriaUI.setVisible(true);
+                break;
+
         }
-        if (ventana != null) {
-            ventana.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-            ventana.setVisible(true);
-        }
+
     }
     public void cargarFunciones(ArrayList<String> listaUIPermitidas, ArrayList<String> listaUINoPermitidas) {
         panelFunciones.removeAll();

@@ -19,7 +19,7 @@ public class HomeBaseDeDatos extends JFrame {
             @Override
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
-                ImageIcon imageIcon = new ImageIcon("E:/1/A.jpg");
+                ImageIcon imageIcon = new ImageIcon("recursos/fondo.jpg");
                 Image image = imageIcon.getImage();
                 g.drawImage(image, 0, 0, getWidth(), getHeight(), this);
             }
