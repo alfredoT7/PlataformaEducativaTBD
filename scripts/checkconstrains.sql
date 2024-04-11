@@ -1,0 +1,60 @@
+ALTER TABLE ESTUDIANTE
+ADD CONSTRAINT chk_correo_estudiantil CHECK (CORREO_ESTIDIANTIL LIKE '%@%');
+
+ALTER TABLE ENTREGA
+ADD CONSTRAINT chk_calificacion_range CHECK (CALIFICACION BETWEEN 0 AND 100 OR CALIFICACION IS NULL);
+
+ALTER TABLE TAREA
+ADD CONSTRAINT chk_fecha_asignacion_before_fecha_entrega CHECK (FECHA_ASIGNACION < FECHA_ENTREGA);
+
+ALTER TABLE TAREA_ENTREGA
+ADD CONSTRAINT chk_fecha_tarea_entregada_not_future CHECK (FECHA_TAREA_ENTREGADA <= CURRENT_DATE);
+
+ALTER TABLE ROL_USERN
+ADD CONSTRAINT chk_desde_before_hasta CHECK (DESDE < HASTA);
+
+ALTER TABLE FUNCION
+ADD CONSTRAINT chk_funcion_activa_not_null CHECK (FUNCION_ACTIVA IS NOT NULL);
+
+ALTER TABLE UI
+ADD CONSTRAINT chk_ui_activo_not_null CHECK (UI_ACTIVO IS NOT NULL);
+
+
+
+-- Asegurarse de que la fecha 'DOCENTE_DESDE' en la tabla DOCENTE sea en el pasado o presente
+ALTER TABLE DOCENTE
+ADD CONSTRAINT chk_docente_desde_past CHECK (DOCENTE_DESDE <= CURRENT_DATE);
+
+-- Asegurarse de que 'FECHA_ACTVACION', 'DESDE' y 'HASTA' en ROL_USERN sean coherentes
+ALTER TABLE ROL_USERN
+ADD CONSTRAINT chk_fecha_activacion_desde CHECK (FECHA_ACTVACION <= DESDE);
+ALTER TABLE ROL_USERN
+ADD CONSTRAINT chk_fecha_activacion_hasta CHECK (FECHA_ACTVACION <= HASTA);
+
+-- Validar que 'FECHA_NAC' en USUARIO sea razonable, ej. no futura y no antes de 1900
+ALTER TABLE USUARIO
+ADD CONSTRAINT chk_fecha_nac_valida CHECK (FECHA_NAC <= CURRENT_DATE AND FECHA_NAC > '1900-01-01');
+
+-- Verificar que 'ESTADO_MATRICULA' en ESTUDIANTE no sea NULL
+ALTER TABLE ESTUDIANTE
+ADD CONSTRAINT chk_estado_matricula_not_null CHECK (ESTADO_MATRICULA IS NOT NULL);
+
+-- Validar que el 'NOMBRE_FUNCION' en FUNCION no esté vacío
+ALTER TABLE FUNCION
+ADD CONSTRAINT chk_nombre_funcion_not_empty CHECK (NOMBRE_FUNCION <> '');
+
+-- Asegurar que 'NOMBRE_ROL' en ROL no esté vacío
+ALTER TABLE ROL
+ADD CONSTRAINT chk_nombre_rol_not_empty CHECK (NOMBRE_ROL <> '');
+
+
+ALTER TABLE ESTUDIANTE
+ADD CONSTRAINT correo_estudiantil_check
+CHECK (CORREO_ESTIDIANTIL LIKE '%@est.umss.edu');
+
+ALTER TABLE DOCENTE
+ADD CONSTRAINT correo_docente_check
+CHECK (CORREO_DOCENTE LIKE '%@doc.umss.edu');
+
+
+

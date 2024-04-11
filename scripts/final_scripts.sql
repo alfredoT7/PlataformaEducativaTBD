@@ -1,16 +1,14 @@
-CREATE FUNCTION get_id_usuario22(nombre_usuario character varying(20), contrasena_usuario character varying(50))
+CREATE FUNCTION get_id_usuario22(nombre_usuariop character varying(20), contrasena_usuario character varying(50))
 RETURNS INT AS
 $$
 DECLARE
     id_usuario INT;
 BEGIN
-    SELECT id_usern INTO id_usuario FROM usuario WHERE nombre=nombre_usuario AND contrasenia=contrasena_usuario;
+    SELECT id_usern INTO id_usuario FROM usuario WHERE nombre_usuario=nombre_usuariop AND contrasenia=contrasena_usuario;
     RETURN id_usuario;
 END;
 $$
 LANGUAGE PLPGSQL;
-
-
 
 
 CREATE OR REPLACE FUNCTION insertar_sesion(p_id_user INT, p_pid INT, p_hora_inicio TIMESTAMP, p_fecha_actual DATE)
@@ -23,8 +21,16 @@ $$ LANGUAGE plpgsql;
 
 
 
-
-
+CREATE OR REPLACE FUNCTION get_rols(id_usern_param INT)
+RETURNS TABLE(nom_rol VARCHAR) AS $$
+BEGIN
+    RETURN QUERY 
+    SELECT rol.nom_rol
+    FROM rol_usuario
+    JOIN rol ON rol_usuario.id_rol = rol.id_rol
+    WHERE rol_usuario.id_usern = id_usern_param;
+END;
+$$ LANGUAGE plpgsql;
 
 
 
@@ -50,12 +56,6 @@ END;
 $$ LANGUAGE plpgsql;
 
 
-
-    SELECT nombre_ui
-    FROM ui
-    WHERE nombre_ui NOT IN (SELECT obtener_nombre_ui_por_usuario(1));
-
-
 CREATE OR REPLACE FUNCTION ui_no_permitida(p_id_user INT)
 RETURNS TABLE(nombre_ui_p VARCHAR) AS $$
 BEGIN
@@ -68,11 +68,6 @@ BEGIN
     );
 END;
 $$ LANGUAGE plpgsql;
-
-
-select ui_no_permitida(1)
-
-
 
 
 CREATE TABLE log_BD (
@@ -88,123 +83,30 @@ CREATE TABLE log_BD (
     evento VARCHAR(40)
 );
 
+CREATE OR REPLACE FUNCTION obtener_nombre_usuario_por_pid(pid_buscar INT)
+RETURNS VARCHAR AS $$
+DECLARE
+    nombre_usuario_var VARCHAR(30);
+BEGIN
+    SELECT nombre_usuario INTO nombre_usuario_var
+    FROM SESION, USUARIO
+    WHERE SESION.id_usern = USUARIO.id_usern AND SESION.pid = pid_buscar;
 
+    RETURN nombre_usuario_var;
+END;
+$$ LANGUAGE plpgsql;
 
 CREATE OR REPLACE FUNCTION trigger_registrar_log()
 RETURNS TRIGGER AS $$
 BEGIN
-	INSERT INTO log_BD(fecha_event, hora_event, dato_viejo, tabla, pid_usuario, evento)
-    VALUES (CURRENT_DATE, LOCALTIME, OLD,NEW, TG_TABLE_NAME, pg_backend_pid(), TG_OP);
+	INSERT INTO log_BD(nom_user,fecha_event, hora_event, dato_viejo, dato_nuevo,tabla, pid_usuario, evento)
+    VALUES (obtener_nombre_usuario_por_pid(pg_backend_pid()),CURRENT_DATE, LOCALTIME, OLD,NEW, TG_TABLE_NAME, pg_backend_pid(), TG_OP);
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
 
 
-    --estudiante
-    CREATE TRIGGER log_bd_delete_estudiante
-    AFTER DELETE ON estudiante
-    FOR EACH ROW
-    EXECUTE FUNCTION trigger_registrar_log();
 
-    CREATE TRIGGER log_bd_update_estudiante
-    AFTER UPDATE ON estudiante
-    FOR EACH ROW
-    EXECUTE FUNCTION trigger_registrar_log();
-
-    CREATE TRIGGER log_bd_insert_estudiante
-    AFTER INSERT ON estudiante
-    FOR EACH ROW
-    EXECUTE FUNCTION trigger_registrar_log();
---docente
-CREATE TRIGGER log_bd_delete_docente
-AFTER DELETE ON docente
-FOR EACH ROW
-EXECUTE FUNCTION trigger_registrar_log();
-
-CREATE TRIGGER log_bd_update_docente
-AFTER UPDATE ON docente
-FOR EACH ROW
-EXECUTE FUNCTION trigger_registrar_log();
-
-CREATE TRIGGER log_bd_insert_docente
-AFTER INSERT ON docente
-FOR EACH ROW
-EXECUTE FUNCTION trigger_registrar_log();
---materia
-CREATE TRIGGER log_bd_delete_materia
-AFTER DELETE ON materia
-FOR EACH ROW
-EXECUTE FUNCTION trigger_registrar_log();
-
-CREATE TRIGGER log_bd_update_materia
-AFTER UPDATE ON materia
-FOR EACH ROW
-EXECUTE FUNCTION trigger_registrar_log();
-
-CREATE TRIGGER log_bd_insert_materia
-AFTER INSERT ON materia
-FOR EACH ROW
-EXECUTE FUNCTION trigger_registrar_log();
---sesion
-CREATE TRIGGER log_bd_delete_sesion
-AFTER DELETE ON sesion
-FOR EACH ROW
-EXECUTE FUNCTION trigger_registrar_log();
-
-CREATE TRIGGER log_bd_update_sesion
-AFTER UPDATE ON sesion
-FOR EACH ROW
-EXECUTE FUNCTION trigger_registrar_log();
-
-CREATE TRIGGER log_bd_insert_sesion
-AFTER INSERT ON sesion
-FOR EACH ROW
-EXECUTE FUNCTION trigger_registrar_log();
---licenciatura
-CREATE TRIGGER log_bd_delete_licenciatura
-AFTER DELETE ON licenciatura
-FOR EACH ROW
-EXECUTE FUNCTION trigger_registrar_log();
-
-CREATE TRIGGER log_bd_update_licenciatura
-AFTER UPDATE ON licenciatura
-FOR EACH ROW
-EXECUTE FUNCTION trigger_registrar_log();
-
-CREATE TRIGGER log_bd_insert_licenciatura
-AFTER INSERT ON licenciatura
-FOR EACH ROW
-EXECUTE FUNCTION trigger_registrar_log();
---grado_academico
-CREATE TRIGGER log_bd_delete_grado_academico
-AFTER DELETE ON grado_academico
-FOR EACH ROW
-EXECUTE FUNCTION trigger_registrar_log();
-
-CREATE TRIGGER log_bd_update_grado_academico
-AFTER UPDATE ON grado_academico
-FOR EACH ROW
-EXECUTE FUNCTION trigger_registrar_log();
-
-CREATE TRIGGER log_bd_insert_grado_academico
-AFTER INSERT ON grado_academico
-FOR EACH ROW
-EXECUTE FUNCTION trigger_registrar_log();
---rol_usuario
-CREATE TRIGGER log_bd_delete_rol_usuario
-AFTER DELETE ON rol_usuario
-FOR EACH ROW
-EXECUTE FUNCTION trigger_registrar_log();
-
-CREATE TRIGGER log_bd_update_rol_usuario
-AFTER UPDATE ON rol_usuario
-FOR EACH ROW
-EXECUTE FUNCTION trigger_registrar_log();
-
-CREATE TRIGGER log_bd_insert_grado_rol_usuario
-AFTER INSERT ON rol_usuario
-FOR EACH ROW
-EXECUTE FUNCTION trigger_registrar_log();
 --comentario
 CREATE TRIGGER log_bd_delete_comentario
 AFTER DELETE ON comentario
@@ -220,19 +122,19 @@ CREATE TRIGGER log_bd_insert_comentario
 AFTER INSERT ON comentario
 FOR EACH ROW
 EXECUTE FUNCTION trigger_registrar_log();
---rol_funcion
-CREATE TRIGGER log_bd_delete_rol_funcion
-AFTER DELETE ON rol_funcion
+--docente
+CREATE TRIGGER log_bd_delete_docente
+AFTER DELETE ON docente
 FOR EACH ROW
 EXECUTE FUNCTION trigger_registrar_log();
 
-CREATE TRIGGER log_bd_update_rol_funcion
-AFTER UPDATE ON rol_funcion
+CREATE TRIGGER log_bd_update_docente
+AFTER UPDATE ON docente
 FOR EACH ROW
 EXECUTE FUNCTION trigger_registrar_log();
 
-CREATE TRIGGER log_bd_insert_rol_funcion
-AFTER INSERT ON rol_funcion
+CREATE TRIGGER log_bd_insert_docente
+AFTER INSERT ON docente
 FOR EACH ROW
 EXECUTE FUNCTION trigger_registrar_log();
 --entrega
@@ -250,19 +152,109 @@ CREATE TRIGGER log_bd_insert_entrega
 AFTER INSERT ON entrega
 FOR EACH ROW
 EXECUTE FUNCTION trigger_registrar_log();
---funcion_ui
-CREATE TRIGGER log_bd_delete_funcion_ui
-AFTER DELETE ON funcion_ui
+--funcion
+CREATE TRIGGER log_bd_delete_funcion
+AFTER DELETE ON funcion
 FOR EACH ROW
 EXECUTE FUNCTION trigger_registrar_log();
 
-CREATE TRIGGER log_bd_update_funcion_ui
-AFTER UPDATE ON funcion_ui
+CREATE TRIGGER log_bd_update_funcion
+AFTER UPDATE ON funcion
 FOR EACH ROW
 EXECUTE FUNCTION trigger_registrar_log();
 
-CREATE TRIGGER log_bd_insert_funcion_ui
-AFTER INSERT ON funcion_ui
+CREATE TRIGGER log_bd_insert_funcion
+AFTER INSERT ON funcion
+FOR EACH ROW
+EXECUTE FUNCTION trigger_registrar_log();
+--grado_academico
+CREATE TRIGGER log_bd_delete_grado_academico
+AFTER DELETE ON grado_academico
+FOR EACH ROW
+EXECUTE FUNCTION trigger_registrar_log();
+
+CREATE TRIGGER log_bd_update_grado_academico
+AFTER UPDATE ON grado_academico
+FOR EACH ROW
+EXECUTE FUNCTION trigger_registrar_log();
+
+CREATE TRIGGER log_bd_insert_grado_academico
+AFTER INSERT ON grado_academico
+FOR EACH ROW
+EXECUTE FUNCTION trigger_registrar_log();
+--inscripcion
+CREATE TRIGGER log_bd_delete_inscripcion
+AFTER DELETE ON inscripcion
+FOR EACH ROW
+EXECUTE FUNCTION trigger_registrar_log();
+
+CREATE TRIGGER log_bd_update_inscripcion
+AFTER UPDATE ON inscripcion
+FOR EACH ROW
+EXECUTE FUNCTION trigger_registrar_log();
+
+CREATE TRIGGER log_bd_insert_inscripcion
+AFTER INSERT ON inscripcion
+FOR EACH ROW
+EXECUTE FUNCTION trigger_registrar_log();
+--licenciatura
+CREATE TRIGGER log_bd_delete_licenciatura
+AFTER DELETE ON licenciatura
+FOR EACH ROW
+EXECUTE FUNCTION trigger_registrar_log();
+
+CREATE TRIGGER log_bd_update_licenciatura
+AFTER UPDATE ON licenciatura
+FOR EACH ROW
+EXECUTE FUNCTION trigger_registrar_log();
+
+CREATE TRIGGER log_bd_insert_licenciatura
+AFTER INSERT ON licenciatura
+FOR EACH ROW
+EXECUTE FUNCTION trigger_registrar_log();
+--materia
+CREATE TRIGGER log_bd_delete_materia
+AFTER DELETE ON materia
+FOR EACH ROW
+EXECUTE FUNCTION trigger_registrar_log();
+
+CREATE TRIGGER log_bd_update_materia
+AFTER UPDATE ON materia
+FOR EACH ROW
+EXECUTE FUNCTION trigger_registrar_log();
+
+CREATE TRIGGER log_bd_insert_materia
+AFTER INSERT ON materia
+FOR EACH ROW
+EXECUTE FUNCTION trigger_registrar_log();
+--rol
+CREATE TRIGGER log_bd_delete_rol
+AFTER DELETE ON rol
+FOR EACH ROW
+EXECUTE FUNCTION trigger_registrar_log();
+
+CREATE TRIGGER log_bd_update_rol
+AFTER UPDATE ON rol
+FOR EACH ROW
+EXECUTE FUNCTION trigger_registrar_log();
+
+CREATE TRIGGER log_bd_insert_rol
+AFTER INSERT ON rol
+FOR EACH ROW
+EXECUTE FUNCTION trigger_registrar_log();
+--sesion
+CREATE TRIGGER log_bd_delete_sesion
+AFTER DELETE ON sesion
+FOR EACH ROW
+EXECUTE FUNCTION trigger_registrar_log();
+
+CREATE TRIGGER log_bd_update_sesion
+AFTER UPDATE ON sesion
+FOR EACH ROW
+EXECUTE FUNCTION trigger_registrar_log();
+
+CREATE TRIGGER log_bd_insert_sesion
+AFTER INSERT ON sesion
 FOR EACH ROW
 EXECUTE FUNCTION trigger_registrar_log();
 --tarea
@@ -280,4 +272,43 @@ CREATE TRIGGER log_bd_insert_tarea
 AFTER INSERT ON tarea
 FOR EACH ROW
 EXECUTE FUNCTION trigger_registrar_log();
+--ui
+CREATE TRIGGER log_bd_delete_ui
+AFTER DELETE ON ui
+FOR EACH ROW
+EXECUTE FUNCTION trigger_registrar_log();
+
+CREATE TRIGGER log_bd_update_ui
+AFTER UPDATE ON ui
+FOR EACH ROW
+EXECUTE FUNCTION trigger_registrar_log();
+
+CREATE TRIGGER log_bd_insert_ui
+AFTER INSERT ON ui
+FOR EACH ROW
+EXECUTE FUNCTION trigger_registrar_log();
+--usuario
+CREATE TRIGGER log_bd_delete_usuario
+AFTER DELETE ON usuario
+FOR EACH ROW
+EXECUTE FUNCTION trigger_registrar_log();
+
+CREATE TRIGGER log_bd_update_usuario
+AFTER UPDATE ON usuario
+FOR EACH ROW
+EXECUTE FUNCTION trigger_registrar_log();
+
+CREATE TRIGGER log_bd_insert_usuario
+AFTER INSERT ON usuario
+FOR EACH ROW
+EXECUTE FUNCTION trigger_registrar_log();
+
+
+
+
+
+
+
+
+
 

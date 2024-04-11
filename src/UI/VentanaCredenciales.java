@@ -1,6 +1,8 @@
 package UI;
 import BD.ComBD;
-import UI.PostCredenciales.*;
+import UI.PostCredenciales.Docente.CrearClaseVirtualUI;
+import UI.PostCredenciales.Docente.MostrarMateriasDictadasUI;
+//import UI.PostCredenciales.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -12,10 +14,13 @@ public class VentanaCredenciales extends JFrame {
 
     private JPanel panelFunciones;
     private Map<String, Runnable> acciones;
+    private int id_user;
+    private ComBD conn;
     //private ArrayList<String> listaUINoPermitidas;
-    ComBD conn;
+    //ComBD conn;
     HomeBaseDeDatos login;
-    public VentanaCredenciales(ComBD conn, InicioDeSesionUI inicioDeSesionUI, String nombreUser, String rolesDelUsuarioStr, HomeBaseDeDatos login, ArrayList<String> listaUIPermitidas, ArrayList<String> listaUINOPermitidas) {
+    public VentanaCredenciales(ComBD conn, InicioDeSesionUI inicioDeSesionUI, String nombreUser, String rolesDelUsuarioStr, HomeBaseDeDatos login, ArrayList<String> listaUIPermitidas, ArrayList<String> listaUINOPermitidas,int id_user) {
+        this.id_user=id_user;
         this.conn = conn;
         this.login = login;
         setLocationRelativeTo(null);
@@ -85,53 +90,39 @@ public class VentanaCredenciales extends JFrame {
     private void abrirVentanaParaFuncion(String funcion) {
         JFrame ventana = null;
         switch (funcion) {
-            case "Ver Tarea":
-                ventana = new VerTareaUI(VentanaCredenciales.this, conn);
+            case "Actualizar Datos Personales":
+                break;
+            case "Ver Detalles de Tarea":
+                break;
+            case "Ver Clases Inscrito":
+                break;
+            case "Ver Detalles Materia":
+                break;
+            case "Crear Clase Virtual":
+                CrearClaseVirtualUI cv = new CrearClaseVirtualUI(conn, id_user,VentanaCredenciales.this);
+                cv.setVisible(true);
+                this.setVisible(false);
+                break;
+            case "Mostrar Detalles de Materia":
+                break;
+            case "Mostrar Materias Dictadas":
+                ArrayList<String> listaMateriasDictadas = new ArrayList<>();
+                listaMateriasDictadas=conn.obtener_materias_por_docente(id_user);
+                MostrarMateriasDictadasUI mostrarMateriasDictadasUI = new MostrarMateriasDictadasUI(listaMateriasDictadas,this,conn, id_user);
                 setVisible(false);
-                //pack();
-                ventana.setVisible(true);
-                ventana.setLocationRelativeTo(null);
-                break;
-            case "Crear Tarea":
-                ventana = new CrearTareaUI();
-                setVisible(false);
-                ventana.setVisible(true);
-                ventana.setLocationRelativeTo(null);
-                break;
-            case "Subir Tarea":
-                ventana = new SubirTareaUI();
-                setVisible(false);
-                ventana.setVisible(true);
-                ventana.setLocationRelativeTo(null);
-                break;
-            case "Ver Registro Estudiante":
-                ventana = new VerRegistroEstudianteUI();
-                setVisible(false);
-                ventana.setVisible(true);
-                ventana.setLocationRelativeTo(null);
-                break;
-            case "Calificar Tarea":
-                ventana = new CalificarTareaUI();
-                setVisible(false);
-                ventana.setVisible(true);
-                ventana.setLocationRelativeTo(null);
-                break;
-            case "Ver Materias Inscrito":
-                ventana = new VerMateriasInscritoUI();
-                setVisible(false);
-                ventana.setVisible(true);
-                ventana.setLocationRelativeTo(null);
-                break;
-            case "Ver Materias Dictadas":
-
-                break;
-            case "Ver Tareas Entregadas":
-                break;
-            case "Generar Reporte Est":
-                break;
-            case "Actualizar Datos del EST":
+                mostrarMateriasDictadasUI.setVisible(true);
                 break;
             case "Crear Usuario Estudiante":
+                break;
+            case "Crear Usuario Docente":
+                break;
+            case "Opciones Modificacion Usuario":
+                break;
+            case "Buscar Usuarios":
+                break;
+            case "Generar Reportes del Alumno":
+                break;
+            case "Ver Datos del Estudiante":
                 break;
             // ... otros casosasd
         }
