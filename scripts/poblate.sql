@@ -121,16 +121,169 @@ select nombre_materia
 where materia.id_materia=uno.id_materia and materia.id_docente=uno.id_docente
 
 CREATE OR REPLACE FUNCTION obtener_nombre_materia_por_estudiante(_id_estudiante INTEGER)
-RETURNS TABLE(nombre_materia VARCHAR) AS $$
+RETURNS TABLE(id_materia INTEGER, id_docente INTEGER, nombre_materia VARCHAR) AS $$
 BEGIN
     RETURN QUERY
-    SELECT m.nombre_materia
-    FROM (
-        SELECT i.id_materia, i.id_docente
-        FROM inscripcion i
-        WHERE i.id_estudiante = _id_estudiante
-    ) uno
-    INNER JOIN materia m ON m.id_materia = uno.id_materia AND m.id_docente = uno.id_docente;
+    SELECT m.id_materia, m.id_docente, m.nombre_materia
+    FROM inscripcion i
+    JOIN materia m ON m.id_materia = i.id_materia AND m.id_docente = i.id_docente
+    WHERE i.id_estudiante = _id_estudiante;
 END;
 $$ LANGUAGE plpgsql;
 SELECT obtener_nombre_materia_por_estudiante(1);
+
+
+
+select id_materia, id_docente
+from(	
+select distinct id_materia as a1, id_docente as d1 --id_materia, id_docente
+from inscripcion 
+where id_estudiante not in(select id_estudiante from inscripcion where id_estudiante=1)
+) one, materia
+where one.a1=materia.id_materia and one.d1 = materia.id_docente
+
+
+
+CREATE OR REPLACE FUNCTION obtener_nombre_materia_por_estudiante(_id_estudiante INTEGER)
+RETURNS TABLE(id_materia INTEGER, id_docente INTEGER, nombre_materia VARCHAR) AS $$
+BEGIN
+    RETURN QUERY
+    SELECT m.id_materia, m.id_docente, m.nombre_materia
+    FROM inscripcion i
+    JOIN materia m ON m.id_materia = i.id_materia AND m.id_docente = i.id_docente
+    WHERE i.id_estudiante = _id_estudiante;
+END;
+$$ LANGUAGE plpgsql;
+SELECT obtener_nombre_materia_por_estudiante(1);
+DROP FUNCTION obtener_nombre_materia_por_estudiante(integer)
+
+
+
+
+
+--funcion insertar_inscripcionFUNCIONA
+CREATE OR REPLACE FUNCTION insertar_inscripcion(_id_materia INTEGER,_id_docente INTEGER,_id_estudiante INTEGER,_periodo_academico VARCHAR
+)
+RETURNS void AS $$
+BEGIN
+    INSERT INTO INSCRIPCION (id_materia, id_docente, id_estudiante, periodo_academico)
+    VALUES (_id_materia, _id_docente, _id_estudiante, _periodo_academico);
+END;
+$$ LANGUAGE plpgsql;
+
+SELECT insertar_inscripcion(3, 5, 1, 'I-2024');
+
+--funcoin para obtener materias a la que el estudiante no esta inscrito
+CREATE OR REPLACE FUNCTION obtener_materias_no_inscritas(_id_estudiante INTEGER)
+RETURNS TABLE(id_materia INTEGER, id_docente INTEGER, nom_materia VARCHAR) AS $$
+BEGIN
+    RETURN QUERY
+    SELECT m.ID_MATERIA, m.ID_DOCENTE, m.NOMBRE_MATERIA
+    FROM MATERIA m
+    WHERE NOT EXISTS (
+        SELECT 1
+        FROM INSCRIPCION i
+        WHERE i.ID_MATERIA = m.ID_MATERIA
+        AND i.ID_ESTUDIANTE = _id_estudiante
+    );
+END;
+$$ LANGUAGE plpgsql;
+select obtener_materias_no_inscritas(1)
+--obtener tareas por estudiante 
+
+CREATE OR REPLACE FUNCTION obtener_tareas_por_cod_estudiant(_id_estudiante INTEGER)
+RETURNS TABLE(id_tarea INTEGER, nombre_tarea VARCHAR) AS $$
+BEGIN
+    RETURN QUERY
+	
+	SELECT t.id_tarea,t.nombre_tarea
+	FROM (
+		SELECT mt.id_tarea
+		FROM (SELECT i.ID_MATERIA, i.ID_DOCENTE
+			  FROM (SELECT e.ID_ESTUDIANTE
+					FROM ESTUDIANTE e
+					WHERE e.ID_ESTUDIANTE =_id_estudiante
+			 ) est, INSCRIPCION i
+			 WHERE est.ID_ESTUDIANTE = i.ID_ESTUDIANTE
+		) insc, MATERIA_TAREA mt
+		WHERE insc.ID_MATERIA = mt.ID_MATERIA AND insc.ID_DOCENTE = mt.ID_DOCENTE
+	) tareas, TAREA t
+	WHERE t.ID_TAREA = tareas.ID_TAREA;
+	
+END;
+$$ LANGUAGE plpgsql;
+select obtener_tareas_por_cod_estudiant(1)
+
+--insertar entrega
+CREATE OR REPLACE FUNCTION insertar_entrega(_retraso_entrega BOOLEAN, _archivo BYTEA)
+RETURNS INTEGER AS $$
+DECLARE
+    _id_entrega INTEGER;
+BEGIN
+    INSERT INTO ENTREGA(retraso_entrega, archivo)
+    VALUES (_retraso_entrega, _archivo)
+    RETURNING id_entrega INTO _id_entrega;
+
+    RETURN _id_entrega;
+END;
+$$ LANGUAGE plpgsql;
+
+
+--SELECT * FROM TAREA_ENTREGA;
+SELECT * FROM TAREA_ENTREGA;
+CREATE OR REPLACE FUNCTION insertar_tarea_entrega(_id_tarea INTEGER, _id_entrega INTEGER, _fecha_tarea_entregada DATE)
+RETURNS VOID AS $$
+BEGIN
+    INSERT INTO TAREA_ENTREGA(id_tarea, id_entrega, fecha_tarea_entregada)
+    VALUES (_id_tarea, _id_entrega, _fecha_tarea_entregada);
+END;
+$$ LANGUAGE plpgsql;
+
+
+--SELECT * FROM ESTUDIANTE_ENTREGA;
+SELECT * FROM ESTUDIANTE_ENTREGA;
+CREATE OR REPLACE FUNCTION insertar_estudiante_entrega(_id_estudiante INTEGER, _id_entrega INTEGER)
+RETURNS VOID AS $$
+BEGIN
+    INSERT INTO ESTUDIANTE_ENTREGA(id_estudiante, id_entrega)
+    VALUES (_id_estudiante, _id_entrega);
+END;
+$$ LANGUAGE plpgsql;
+
+
+
+
+
+SELECT distinct
+    t.ID_TAREA, 
+    t.NOMBRE_TAREA, 
+    t.FECHA_ASIGNACION, 
+    t.FECHA_ENTREGA, 
+    t.DESCRIPCION_TAREA,
+    e.ARCHIVO
+FROM TAREA t
+JOIN MATERIA_TAREA mt ON t.ID_TAREA = mt.ID_TAREA
+JOIN INSCRIPCION i ON mt.ID_MATERIA = i.ID_MATERIA
+JOIN ESTUDIANTE_ENTREGA ee ON i.ID_ESTUDIANTE = ee.ID_ESTUDIANTE
+JOIN ENTREGA e ON ee.ID_ENTREGA = e.ID_ENTREGA
+WHERE mt.ID_DOCENTE = 5 AND e.ARCHIVO IS NOT NULL;
+
+
+
+
+
+SELECT DISTINCT
+    t.ID_TAREA, 
+    t.NOMBRE_TAREA, 
+    t.FECHA_ASIGNACION, 
+    t.FECHA_ENTREGA, 
+    t.DESCRIPCION_TAREA,
+    m.NOMBRE_MATERIA,  -- Asumiendo que 'NOMBRE_MATERIA' es el nombre de la columna en la tabla MATERIA
+    e.ARCHIVO
+FROM TAREA t
+JOIN MATERIA_TAREA mt ON t.ID_TAREA = mt.ID_TAREA
+JOIN MATERIA m ON mt.ID_MATERIA = m.ID_MATERIA  -- Uniendo la tabla MATERIA aquí
+JOIN INSCRIPCION i ON m.ID_MATERIA = i.ID_MATERIA
+JOIN ESTUDIANTE_ENTREGA ee ON i.ID_ESTUDIANTE = ee.ID_ESTUDIANTE
+JOIN ENTREGA e ON ee.ID_ENTREGA = e.ID_ENTREGA
+WHERE mt.ID_DOCENTE = 5 AND e.ARCHIVO IS NOT NULL;

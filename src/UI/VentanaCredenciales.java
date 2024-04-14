@@ -4,6 +4,7 @@ import UI.PostCredenciales.Docente.CrearClaseVirtualUI;
 import UI.PostCredenciales.Docente.MostrarMateriasDictadasUI;
 import UI.PostCredenciales.Estudiante.InscripcionMateriaUI;
 import UI.PostCredenciales.Estudiante.VerClasesInscritoUI;
+import UI.PostCredenciales.Estudiante.VerDetalleDeTareaUI;
 //import UI.PostCredenciales.*;
 
 import javax.swing.*;
@@ -95,11 +96,15 @@ public class VentanaCredenciales extends JFrame {
             case "Actualizar Datos Personales":
                 break;
             case "Ver Detalles de Tarea":
+                VerDetalleDeTareaUI verDetalleDeTareaUI = new VerDetalleDeTareaUI(conn,id_user, VentanaCredenciales.this);
+                //ventana = verDetalleDeTareaUI;
+                verDetalleDeTareaUI.setVisible(true);
+                this.setVisible(false);
                 break;
             case "Ver Clases Inscrito":
                 VerClasesInscritoUI verClasesInscritoUI= new VerClasesInscritoUI(conn,id_user);
                 break;
-            case "Ver Detalles Materia":
+            case "Ver Detalles Tareas Entregadas":
                 break;
             case "Crear Clase Virtual":
                 CrearClaseVirtualUI cv = new CrearClaseVirtualUI(conn, id_user,VentanaCredenciales.this);

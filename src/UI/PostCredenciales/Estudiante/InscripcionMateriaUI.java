@@ -6,6 +6,7 @@ import UI.VentanaCredenciales;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 public class InscripcionMateriaUI extends JFrame {
@@ -13,7 +14,7 @@ public class InscripcionMateriaUI extends JFrame {
     private JPanel materiasPanel;
     private ComBD conn;
     private int id_estudiante;
-    VentanaCredenciales ventanaCredenciales;
+    private VentanaCredenciales ventanaCredenciales;
     public InscripcionMateriaUI(ComBD conn, int id_estudiante, VentanaCredenciales ventanaCredenciales) {
         this.ventanaCredenciales=ventanaCredenciales;
         this.conn = conn;
@@ -24,14 +25,17 @@ public class InscripcionMateriaUI extends JFrame {
     private void initializeUI() {
         setTitle("Inscripción a Materias");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setLayout(new BorderLayout());
-        setSize(new Dimension(400, 600));
+        setSize(400, 300);
         setLocationRelativeTo(null);
+        setResizable(false);
 
         materiasPanel = new JPanel();
         materiasPanel.setLayout(new BoxLayout(materiasPanel, BoxLayout.Y_AXIS));
         JScrollPane scrollPane = new JScrollPane(materiasPanel);
-        add(scrollPane, BorderLayout.CENTER);
+        scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+        add(scrollPane);
+
+        cargarMateriasDisponibles();
 
         JButton volverButton = new JButton("Volver");
         volverButton.addActionListener(e -> {
@@ -40,34 +44,38 @@ public class InscripcionMateriaUI extends JFrame {
         });
         add(volverButton, BorderLayout.SOUTH);
 
-        cargarMateriasDisponibles();
-
         setVisible(true);
     }
 
     private void cargarMateriasDisponibles() {
-        ArrayList<String> materiasDisponibles = conn.obtener_materia_docente_por_estudiante_excluyendo(id_estudiante);
+        ArrayList<String> materiasDisponibles = conn.obtener_materias_no_inscritas(id_estudiante);
 
         for (String materia : materiasDisponibles) {
-            JPanel filaMateria = new JPanel(new FlowLayout(FlowLayout.LEFT));
-            filaMateria.setAlignmentX(Component.LEFT_ALIGNMENT);
+            String[] partes = materia.split(",");
+            String idMateria = partes[0].substring(1).trim();
+            String idDocente = partes[1].trim();
+            String nombreMateria = partes[2].substring(0, partes[2].length() - 1).trim().replace("\"", "");
 
-            JLabel labelMateria = new JLabel(materia);
+            JPanel filaMateria = new JPanel();
+            filaMateria.setLayout(new FlowLayout(FlowLayout.LEFT));
+            filaMateria.add(new JLabel(nombreMateria));
+
             JButton botonInscribirse = new JButton("Inscribirse");
-
-            botonInscribirse.addActionListener(e -> {
-
+            botonInscribirse.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    conn.insertar_inscripcion(Integer.parseInt(idMateria), Integer.parseInt(idDocente), id_estudiante, "I-2024");
+                    JOptionPane.showMessageDialog(null, "Inscripción realizada: " + nombreMateria);
+                    dispose();
+                    new InscripcionMateriaUI(conn, id_estudiante,ventanaCredenciales);
+                }
             });
 
-            filaMateria.add(labelMateria);
             filaMateria.add(botonInscribirse);
             materiasPanel.add(filaMateria);
         }
-    }
-    private int obtenerIdMateria(String materia) {
-        return Integer.parseInt(materia.substring(1, materia.indexOf(',')));
-    }
-    private String obtenerNombreMateria(String materia) {
-        return materia.substring(materia.indexOf(',') + 1, materia.length() - 1).trim();
+
+        materiasPanel.revalidate();
+        materiasPanel.repaint();
     }
 }

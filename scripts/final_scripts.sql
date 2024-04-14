@@ -307,8 +307,3 @@ EXECUTE FUNCTION trigger_registrar_log();
 
 
 
-
-
-
-
-

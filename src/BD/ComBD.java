@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class ComBD {
-    //private static final String url="jdbc:postgresql://localhost:5432/Plataforma&Seg";
     private static final String url="jdbc:postgresql://localhost:5432/TBDplatLast";
     private static final String user="postgres";
     private static final String contraseña="notebok456";
@@ -286,20 +285,23 @@ public class ComBD {
         }catch (SQLException e ){e.printStackTrace();}
         return listaMateriasInscrito;
     }
-    public ArrayList<String> obtener_materia_docente_por_estudiante_excluyendo(int id_est){
+
+    public ArrayList<String> obtener_materias_no_inscritas(int id_est){
         ArrayList<String> listaMateriasNoInscrito = new ArrayList<>();
         PreparedStatement textoQuery = null;
         ResultSet resultSet = null;
-        try{
-            String consulta="select obtener_materia_docente_por_estudiante_excluyendo(?)";
+        try {
+            String consulta="select obtener_materias_no_inscritas(?);";
             textoQuery=connection.prepareStatement(consulta);
             textoQuery.setInt(1,id_est);
             resultSet=textoQuery.executeQuery();
             while (resultSet.next()) {
-                String mat = resultSet.getString("obtener_materia_docente_por_estudiante_excluyendo");
+                String mat = resultSet.getString("obtener_materias_no_inscritas");
                 listaMateriasNoInscrito.add(mat);
             }
-        }catch (SQLException e){e.printStackTrace();}
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
         return listaMateriasNoInscrito;
     }
     public void insertar_inscripcion(int id_materia, int id_docente, int id_est, String periodo_acad){
@@ -315,6 +317,98 @@ public class ComBD {
             textoQuery.execute();
         }catch (SQLException e){
             e.printStackTrace();
+        }
+    }
+    public ArrayList<String> obtener_tareas_por_cod_estudiant(int id_estudiante){
+        ArrayList<String> listaTareas = new ArrayList<>();
+        PreparedStatement textoQuery = null;
+        ResultSet resultSet = null;
+        try{
+            String consulta="select obtener_tareas_por_cod_estudiant(?);";
+            textoQuery=connection.prepareStatement(consulta);
+            textoQuery.setInt(1,id_estudiante);
+            resultSet=textoQuery.executeQuery();
+            while (resultSet.next()) {
+                String tarea = resultSet.getString("obtener_tareas_por_cod_estudiant");
+                listaTareas.add(tarea);
+            }
+
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+        return listaTareas;
+    }
+    public int insertarEntrega(boolean retrasoEntrega, byte[] archivo) {
+        int idEntrega = -1;
+        PreparedStatement textoQuery = null;
+        ResultSet resultSet = null;
+        try {
+            String consulta = "SELECT insertar_entrega(?, ?)";
+            textoQuery = connection.prepareStatement(consulta);
+            textoQuery.setBoolean(1, retrasoEntrega);
+            textoQuery.setBytes(2, archivo);
+
+            // Ejecutar la consulta y obtener el id de la entrega.
+            resultSet = textoQuery.executeQuery();
+            if (resultSet.next()) {
+                idEntrega = resultSet.getInt(1); // Obtener el primer campo del resultado, que es el id de la entrega.
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            // Asegúrate de cerrar todos los recursos para evitar fugas de memoria
+            try {
+                if (resultSet != null) resultSet.close();
+                if (textoQuery != null) textoQuery.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return idEntrega;
+    }
+    public void insertar_tarea_entrega(int idTarea, int idEntrega, Date fechaEntrega) {
+        PreparedStatement textoQuery = null;
+        try {
+            String consulta = "SELECT insertar_tarea_entrega(?, ?, ?)";
+            textoQuery = connection.prepareStatement(consulta);
+            textoQuery.setInt(1, idTarea);
+            textoQuery.setInt(2, idEntrega);
+            textoQuery.setDate(3, new java.sql.Date(fechaEntrega.getTime()));
+            textoQuery.execute();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            // Asegúrate de cerrar PreparedStatement para evitar fugas de memoria
+            if (textoQuery != null) {
+                try {
+                    textoQuery.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+    public void insertar_estudiante_entrega(int idEstudiante, int idEntrega) {
+        PreparedStatement textoQuery = null;
+        try {
+            String consulta = "SELECT insertar_estudiante_entrega(?, ?)";
+            textoQuery = connection.prepareStatement(consulta);
+            textoQuery.setInt(1, idEstudiante);
+            textoQuery.setInt(2, idEntrega);
+
+            textoQuery.execute();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            // Asegúrate de cerrar PreparedStatement para evitar fugas de memoria
+            if (textoQuery != null) {
+                try {
+                    textoQuery.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 
