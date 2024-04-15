@@ -347,16 +347,13 @@ public class ComBD {
             textoQuery = connection.prepareStatement(consulta);
             textoQuery.setBoolean(1, retrasoEntrega);
             textoQuery.setBytes(2, archivo);
-
-            // Ejecutar la consulta y obtener el id de la entrega.
             resultSet = textoQuery.executeQuery();
             if (resultSet.next()) {
-                idEntrega = resultSet.getInt(1); // Obtener el primer campo del resultado, que es el id de la entrega.
+                idEntrega = resultSet.getInt(1);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            // Asegúrate de cerrar todos los recursos para evitar fugas de memoria
             try {
                 if (resultSet != null) resultSet.close();
                 if (textoQuery != null) textoQuery.close();
@@ -379,7 +376,6 @@ public class ComBD {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            // Asegúrate de cerrar PreparedStatement para evitar fugas de memoria
             if (textoQuery != null) {
                 try {
                     textoQuery.close();
@@ -401,7 +397,6 @@ public class ComBD {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            // Asegúrate de cerrar PreparedStatement para evitar fugas de memoria
             if (textoQuery != null) {
                 try {
                     textoQuery.close();

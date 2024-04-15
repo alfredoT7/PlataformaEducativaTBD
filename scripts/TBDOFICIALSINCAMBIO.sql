@@ -19,6 +19,7 @@ create table ENTREGA (
    ID_TIPO_ARCHIVO      INT4                 null,
    RETRASO_ENTREGA      BOOL                 not null,
    CALIFICACION         INT4                 null,
+   ENTREGA				BYTEA				 null,
    constraint PK_ENTREGA primary key (ID_ENTREGA)
 );
 create table ESTUDIANTE (
