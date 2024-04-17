@@ -2,6 +2,7 @@ package UI;
 import BD.ComBD;
 import UI.PostCredenciales.Docente.CrearClaseVirtualUI;
 import UI.PostCredenciales.Docente.MostrarMateriasDictadasUI;
+import UI.PostCredenciales.Docente.VerDetalleTareasEntregadas;
 import UI.PostCredenciales.Estudiante.InscripcionMateriaUI;
 import UI.PostCredenciales.Estudiante.VerClasesInscritoUI;
 import UI.PostCredenciales.Estudiante.VerDetalleDeTareaUI;
@@ -105,6 +106,9 @@ public class VentanaCredenciales extends JFrame {
                 VerClasesInscritoUI verClasesInscritoUI= new VerClasesInscritoUI(conn,id_user);
                 break;
             case "Ver Detalles Tareas Entregadas":
+                VerDetalleTareasEntregadas verDetalleTareasEntregadas= new VerDetalleTareasEntregadas(conn,id_user,this);
+                verDetalleTareasEntregadas.setVisible(true);
+                this.setVisible(false);
                 break;
             case "Crear Clase Virtual":
                 CrearClaseVirtualUI cv = new CrearClaseVirtualUI(conn, id_user,VentanaCredenciales.this);

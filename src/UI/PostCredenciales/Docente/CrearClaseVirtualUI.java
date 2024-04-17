@@ -71,7 +71,6 @@ public class CrearClaseVirtualUI extends JFrame {
                 JOptionPane.showMessageDialog(CrearClaseVirtualUI.this, "Materia " + nombreMateria + " creada con éxito!");
             }
         });
-
-        setVisible(true); // Es mejor llamar a setVisible después de haber agregado todos los componentes.
+        setVisible(true);
     }
 }

@@ -1,11 +1,13 @@
 package BD;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Random;
 
 public class ComBD {
-    private static final String url="jdbc:postgresql://localhost:5432/TBDplatLast";
+    private static final String url="jdbc:postgresql://localhost:5432/plataformaEDU";
     private static final String user="postgres";
     private static final String contraseña="notebok456";
     private Connection connection;
@@ -242,11 +244,9 @@ public class ComBD {
             textoQuery.setDate(2, new java.sql.Date(fechaAsignacion.getTime()));
             textoQuery.setDate(3, new java.sql.Date(fechaEntrega.getTime()));
             textoQuery.setString(4, descripcionTarea);
-
-            // Ejecutar la consulta y obtener el id de la tarea.
             resultSet= textoQuery.executeQuery();
             if (resultSet.next()) {
-                tareaId = resultSet.getInt(1); // Obtener el primer campo del resultado, que es el id de la tarea.
+                tareaId = resultSet.getInt(1);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -403,6 +403,53 @@ public class ComBD {
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
+            }
+        }
+    }
+
+    public ArrayList<TareaEntregada> obtenerTareasEntregadasDocente(int idDocente) {
+        ArrayList<TareaEntregada> tareasEntregadas = new ArrayList<>();
+        PreparedStatement textoQuery = null;
+        ResultSet resultSet = null;
+        try {
+            String consulta = "SELECT * FROM obtener_tareas_entregadas_docente(?)";
+            textoQuery = connection.prepareStatement(consulta);
+            textoQuery.setInt(1, idDocente);
+            resultSet = textoQuery.executeQuery();
+            while (resultSet.next()) {
+                int idTarea = resultSet.getInt("id_tarea");
+                String nombreTarea = resultSet.getString("nombre_tarea");
+                String nombreMateria = resultSet.getString("nombre_materia");
+                String nombreEstudiante = resultSet.getString("nombre_estudiante");
+                byte[] archivo = resultSet.getBytes("archivo");
+
+                // Aquí podrías, por ejemplo, guardar el archivo en disco o hacer otra cosa con él
+                String nombreArchivo = "Tarea_" + idTarea + "_Archivo";
+                guardarArchivo(archivo, nombreArchivo);
+
+                // Agregando la tarea a la lista
+                tareasEntregadas.add(new TareaEntregada(idTarea, nombreTarea, nombreMateria, nombreEstudiante, nombreArchivo));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (resultSet != null) resultSet.close();
+                if (textoQuery != null) textoQuery.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return tareasEntregadas;
+    }
+
+    private void guardarArchivo(byte[] archivo, String nombreArchivo) {
+        if (archivo != null) {
+            try (FileOutputStream fos = new FileOutputStream(nombreArchivo)) {
+                fos.write(archivo);
+                System.out.println("Archivo guardado: " + nombreArchivo);
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
     }

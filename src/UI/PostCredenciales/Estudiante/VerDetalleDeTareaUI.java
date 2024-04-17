@@ -59,8 +59,6 @@ public class VerDetalleDeTareaUI extends JFrame {
             botonEntregar.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    // Aquí podrías llamar a otro método para manejar la entrega de la tarea.
-                    // Por ejemplo: conn.entregarTarea(id_estudiante, obtenerIdTarea(tarea));
                     EntregaUI entregaUI = new EntregaUI(conn,id_estudiante,tarea, VerDetalleDeTareaUI.this);
                     entregaUI.setVisible(true);
                     setVisible(false);

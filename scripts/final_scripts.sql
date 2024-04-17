@@ -137,21 +137,38 @@ CREATE TRIGGER log_bd_insert_docente
 AFTER INSERT ON docente
 FOR EACH ROW
 EXECUTE FUNCTION trigger_registrar_log();
---entrega
-CREATE TRIGGER log_bd_delete_entrega
-AFTER DELETE ON entrega
+--estudiante
+CREATE TRIGGER log_bd_delete_estudiante
+AFTER DELETE ON estudiante
 FOR EACH ROW
 EXECUTE FUNCTION trigger_registrar_log();
 
-CREATE TRIGGER log_bd_update_entrega
-AFTER UPDATE ON entrega
+CREATE TRIGGER log_bd_update_estudiante
+AFTER UPDATE ON estudiante
 FOR EACH ROW
 EXECUTE FUNCTION trigger_registrar_log();
 
-CREATE TRIGGER log_bd_insert_entrega
-AFTER INSERT ON entrega
+CREATE TRIGGER log_bd_insert_estudiante
+AFTER INSERT ON estudiante
 FOR EACH ROW
 EXECUTE FUNCTION trigger_registrar_log();
+--estudiante_entrega
+CREATE TRIGGER log_bd_delete_estudiante_entrega
+AFTER DELETE ON estudiante_entrega
+FOR EACH ROW
+EXECUTE FUNCTION trigger_registrar_log();
+
+CREATE TRIGGER log_bd_update_estudiante_entrega
+AFTER UPDATE ON estudiante_entrega
+FOR EACH ROW
+EXECUTE FUNCTION trigger_registrar_log();
+
+CREATE TRIGGER log_bd_insert_estudiante_entrega
+AFTER INSERT ON estudiante_entrega
+FOR EACH ROW
+EXECUTE FUNCTION trigger_registrar_log();
+
+
 --funcion
 CREATE TRIGGER log_bd_delete_funcion
 AFTER DELETE ON funcion
@@ -165,6 +182,21 @@ EXECUTE FUNCTION trigger_registrar_log();
 
 CREATE TRIGGER log_bd_insert_funcion
 AFTER INSERT ON funcion
+FOR EACH ROW
+EXECUTE FUNCTION trigger_registrar_log();
+--funcionui
+CREATE TRIGGER log_bd_delete_funcionui
+AFTER DELETE ON funcion_ui
+FOR EACH ROW
+EXECUTE FUNCTION trigger_registrar_log();
+
+CREATE TRIGGER log_bd_update_funcionui
+AFTER UPDATE ON funcion_ui
+FOR EACH ROW
+EXECUTE FUNCTION trigger_registrar_log();
+
+CREATE TRIGGER log_bd_insert_funcionui
+AFTER INSERT ON funcion_ui
 FOR EACH ROW
 EXECUTE FUNCTION trigger_registrar_log();
 --grado_academico
@@ -242,7 +274,40 @@ CREATE TRIGGER log_bd_insert_rol
 AFTER INSERT ON rol
 FOR EACH ROW
 EXECUTE FUNCTION trigger_registrar_log();
+--rol_funcion
+CREATE TRIGGER log_bd_delete_rol_funcion
+AFTER DELETE ON rol_funcion
+FOR EACH ROW
+EXECUTE FUNCTION trigger_registrar_log();
+
+CREATE TRIGGER log_bd_update_rol_funcion
+AFTER UPDATE ON rol_funcion
+FOR EACH ROW
+EXECUTE FUNCTION trigger_registrar_log();
+
+CREATE TRIGGER log_bd_insert_rol_funcion
+AFTER INSERT ON rol_funcion
+FOR EACH ROW
+EXECUTE FUNCTION trigger_registrar_log();
+--rol_usuario
+CREATE TRIGGER log_bd_delete_rol_usuario
+AFTER DELETE ON rol_usuario
+FOR EACH ROW
+EXECUTE FUNCTION trigger_registrar_log();
+
+CREATE TRIGGER log_bd_update_rol_usuario
+AFTER UPDATE ON rol_usuario
+FOR EACH ROW
+EXECUTE FUNCTION trigger_registrar_log();
+
+CREATE TRIGGER log_bd_insert_rol_usuario
+AFTER INSERT ON rol_usuario
+FOR EACH ROW
+EXECUTE FUNCTION trigger_registrar_log();
+
 --sesion
+
+
 CREATE TRIGGER log_bd_delete_sesion
 AFTER DELETE ON sesion
 FOR EACH ROW
@@ -270,6 +335,21 @@ EXECUTE FUNCTION trigger_registrar_log();
 
 CREATE TRIGGER log_bd_insert_tarea
 AFTER INSERT ON tarea
+FOR EACH ROW
+EXECUTE FUNCTION trigger_registrar_log();
+--tarea_entrega
+CREATE TRIGGER log_bd_delete_tarea_entrega
+AFTER DELETE ON tarea_entrega
+FOR EACH ROW
+EXECUTE FUNCTION trigger_registrar_log();
+
+CREATE TRIGGER log_bd_update_tarea_entrega
+AFTER UPDATE ON tarea_entrega
+FOR EACH ROW
+EXECUTE FUNCTION trigger_registrar_log();
+
+CREATE TRIGGER log_bd_insert_tarea_entrega
+AFTER INSERT ON tarea_entrega
 FOR EACH ROW
 EXECUTE FUNCTION trigger_registrar_log();
 --ui
@@ -300,6 +380,21 @@ EXECUTE FUNCTION trigger_registrar_log();
 
 CREATE TRIGGER log_bd_insert_usuario
 AFTER INSERT ON usuario
+FOR EACH ROW
+EXECUTE FUNCTION trigger_registrar_log();
+--entrega
+CREATE TRIGGER log_bd_delete_entrega
+AFTER DELETE ON entrega
+FOR EACH ROW
+EXECUTE FUNCTION trigger_registrar_log();
+
+CREATE TRIGGER log_bd_update_entrega
+AFTER UPDATE ON entrega
+FOR EACH ROW
+EXECUTE FUNCTION trigger_registrar_log();
+
+CREATE TRIGGER log_bd_insert_entrega
+AFTER INSERT ON entrega
 FOR EACH ROW
 EXECUTE FUNCTION trigger_registrar_log();
 

@@ -175,7 +175,7 @@ public class EntregaUI extends JFrame {
         if (archivoSeleccionado != null) {
             try {
                 byte[] archivoBytes = leerArchivoComoBytes(archivoSeleccionado);
-                boolean retrasoEntrega = false; // Determinar si hay retraso en la entrega, si es necesario.
+                boolean retrasoEntrega = false;
                 int idEntrega = conn.insertarEntrega(retrasoEntrega, archivoBytes);
 
                 if (idEntrega != -1) {
@@ -186,7 +186,7 @@ public class EntregaUI extends JFrame {
                     conn.insertar_estudiante_entrega(id_estudiante, idEntrega);
 
                     JOptionPane.showMessageDialog(this, "Tarea entregada con éxito. ID de entrega: " + idEntrega);
-                    ventanaAnterior.dispose();
+                    ventanaAnterior.setVisible(true);
                     dispose();
                 } else {
                     JOptionPane.showMessageDialog(this, "No se pudo registrar la entrega", "Error", JOptionPane.ERROR_MESSAGE);
@@ -212,3 +212,32 @@ public class EntregaUI extends JFrame {
         return Integer.parseInt(tarea.substring(1, tarea.indexOf(',')));
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

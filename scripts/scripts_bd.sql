@@ -39,3 +39,79 @@ JOIN INSCRIPCION i ON mt.ID_MATERIA = i.ID_MATERIA
 JOIN ESTUDIANTE_ENTREGA ee ON i.ID_ESTUDIANTE = ee.ID_ESTUDIANTE
 JOIN ENTREGA e ON ee.ID_ENTREGA = e.ID_ENTREGA
 WHERE mt.ID_DOCENTE = 5 AND e.ARCHIVO IS NOT NULL;
+
+
+
+
+
+SELECT distinct
+    t.ID_TAREA, 
+    t.NOMBRE_TAREA, 
+    m.NOMBRE_MATERIA, 
+    CONCAT(u.NOMBRES, ' ', u.APELLIDOS) AS NOMBRE_ESTUDIANTE,
+    e.ARCHIVO -- Incluir el archivo de la entrega
+FROM 
+    TAREA t
+JOIN 
+    MATERIA_TAREA mt ON t.ID_TAREA = mt.ID_TAREA
+JOIN 
+    MATERIA m ON mt.ID_MATERIA = m.ID_MATERIA
+JOIN 
+    INSCRIPCION i ON m.ID_MATERIA = i.ID_MATERIA
+JOIN 
+    ESTUDIANTE_ENTREGA ee ON i.ID_ESTUDIANTE = ee.ID_ESTUDIANTE
+JOIN 
+    ENTREGA e ON ee.ID_ENTREGA = e.ID_ENTREGA
+JOIN 
+    ESTUDIANTE est ON i.ID_ESTUDIANTE = est.ID_ESTUDIANTE
+JOIN 
+    USUARIO u ON est.ID_ESTUDIANTE = u.ID_USERN
+WHERE 
+    mt.ID_DOCENTE = 5 AND 
+    e.ARCHIVO IS NOT NULL;
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+CREATE OR REPLACE FUNCTION obtener_tareas_entregadas_docente(_id_docente INT)
+RETURNS TABLE(id_tarea INT, nombre_tarea VARCHAR, nombre_materia VARCHAR, nombre_estudiante VARCHAR, archivo BYTEA) AS $$
+BEGIN
+    RETURN QUERY
+    SELECT DISTINCT
+        t.ID_TAREA,
+        t.NOMBRE_TAREA,
+        m.NOMBRE_MATERIA,
+        CAST(CONCAT(u.NOMBRES, ' ', u.APELLIDOS) AS VARCHAR) AS NOMBRE_ESTUDIANTE,
+        e.ARCHIVO
+    FROM 
+        TAREA t
+    JOIN 
+        MATERIA_TAREA mt ON t.ID_TAREA = mt.ID_TAREA
+    JOIN 
+        MATERIA m ON mt.ID_MATERIA = m.ID_MATERIA
+    JOIN 
+        INSCRIPCION i ON m.ID_MATERIA = i.ID_MATERIA
+    JOIN 
+        ESTUDIANTE_ENTREGA ee ON i.ID_ESTUDIANTE = ee.ID_ESTUDIANTE
+    JOIN 
+        ENTREGA e ON ee.ID_ENTREGA = e.ID_ENTREGA
+    JOIN 
+        ESTUDIANTE est ON i.ID_ESTUDIANTE = est.ID_ESTUDIANTE
+    JOIN 
+        USUARIO u ON est.ID_ESTUDIANTE = u.ID_USERN
+    WHERE 
+        mt.ID_DOCENTE = _id_docente AND 
+        e.ARCHIVO IS NOT NULL;
+END;
+$$ LANGUAGE plpgsql;
+
+
+SELECT obtener_tareas_entregadas_docente(5);
+SELECT distinct * FROM obtener_tareas_entregadas_docente(5);
+
